@@ -73,9 +73,9 @@
 
 <br>
 
-- [ ] Temperament
-    - [ ] Debe tener un ID
-    - [ ] Debe tener un Nombre
+- [x] Temperament
+    - [x] Debe tener un ID
+    - [x] Debe tener un Nombre
 
 <br>
 
