@@ -59,21 +59,25 @@
 <br>
 
   # Base de Datos
-  - [ ] Breeds
-    - [ ] Debe tener un ID
-     - [ ] Requerido
-    - [ ] Debe tener un Nombre
-        - [ ] Requerido
-    - [ ] Debe tener un Altura
-        - [ ] Requerido
-    - [ ] Debe tener un Peso
-        - [ ] Requerido
-    - [ ] Debe tener años de vida
-        - [ ] Nullable
+  - [x] Dog
+    - [x] Debe tener un ID
+     - [x] Requerido
+    - [x] Debe tener un Nombre
+        - [x] Requerido
+    - [x] Debe tener un Altura
+        - [x] Requerido
+    - [x] Debe tener un Peso
+        - [x] Requerido
+    - [x] Debe tener años de vida
+        - [x] Debe tener un formato especifico
+
+<br>
 
 - [ ] Temperament
     - [ ] Debe tener un ID
     - [ ] Debe tener un Nombre
+
+<br>
 
 - [ ] La relacion debe ser muchos a muchos
 
