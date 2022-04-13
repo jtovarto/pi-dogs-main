@@ -6,6 +6,7 @@ const dogData = {
   height: "5 - 10",
   weight: "20 - 25",
   lifespan: "5 - 10",
+  image: "https://fake-image.com"
 };
 
 describe("Dog model", () => {
@@ -68,6 +69,13 @@ describe("Dog model", () => {
       it("should set a new format for lifespan", async () => {
         const dog = await Dog.create(dogData);
         expect(dog.toJSON()).to.have.property("lifespan", "5 - 10 years");
+      });
+    });
+
+    describe.only("image", () => {
+      it("should have a image", async () => {
+        const dog = await Dog.create(dogData);
+        expect(dog.toJSON()).to.have.property("image", dogData.image);
       });
     });
   });
