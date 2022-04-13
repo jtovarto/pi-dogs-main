@@ -79,11 +79,11 @@
 
 <br>
 
-- [ ] La relacion debe ser muchos a muchos
+- [x] La relacion debe ser muchos a muchos
 
 <br>
 
 # Testing
 - [ ] Al menos un component con test
 - [ ] Al menos un backend con test
-- [ ] Al menos un modelo con test
+- [x] Al menos un modelo con test
