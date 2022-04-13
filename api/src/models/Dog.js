@@ -31,5 +31,11 @@ module.exports = (sequelize) => {
         this.setDataValue("lifespan", value + " years");
       },
     },
+    image: {
+      type: DataTypes.STRING,
+      validate: {
+        isUrl: true,
+      },
+    },
   });
 };

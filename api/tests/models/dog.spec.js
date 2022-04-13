@@ -72,7 +72,7 @@ describe("Dog model", () => {
       });
     });
 
-    describe.only("image", () => {
+    describe("image", () => {
       it("should have a image", async () => {
         const dog = await Dog.create(dogData);
         expect(dog.toJSON()).to.have.property("image", dogData.image);
