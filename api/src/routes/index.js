@@ -5,7 +5,7 @@ const { Router } = require("express");
 const router = Router();
 
 // Configurar los routers
-router.use("/dogs", require("./dogs.js"));
 router.use("/dog", require("./dog.js"));
+router.use("/dogs", require("./dogs.js"));
 
 module.exports = router;

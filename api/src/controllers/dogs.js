@@ -17,11 +17,12 @@ const getAll = async (req, res) => {
       response = [...response, ...apiBreeds];
     }
 
-    if (response.length === 0) {
+    if (response?.length === 0) {
       return res.status(404).json({ message: "No results was found" });
     }
     res.json(response);
   } catch (error) {
+    
     res.json({
       success: false,
       error: "Something was worng",
@@ -67,7 +68,6 @@ const create = async (req, res) => {
       lifespan: `${lifespan[0]} - ${lifespan[1]}`,
       image,
     });
-
     const createdTemperaments = await Temperament.findAll({
       where: { id: temperaments },
     });
@@ -75,7 +75,14 @@ const create = async (req, res) => {
     await dog.setTemperaments(createdTemperaments);
 
     return res.status(201).json(dog);
-  } catch (error) {    
+  } catch (error) {
+    if (
+      error.errors.length > 0 &&
+      error.errors[0].message === "name must be unique"
+    ) {
+      return res.status(400).json({ message: error.errors[0].message });
+    }
+
     return res.status(400).json({ message: "Something went wrong" });
   }
 };

@@ -47,9 +47,10 @@ const getById = async (id) => {
 };
 
 function mapTempers(tempers) {
-  if (tempers.length < 1) {
+  if (tempers === undefined || tempers.length < 1) {
     return [];
   }
+  
   return tempers?.split(",").map((temper) => ({ name: temper.trim() }));
 }
 
