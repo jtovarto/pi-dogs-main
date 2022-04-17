@@ -1,4 +1,8 @@
 const getters = require("../services/breeds");
+const {
+  getBreedByIdFromDB,
+  getBreedByIdFromApi,
+} = require("../services/breeds");
 
 const getAll = async (req, res) => {
   const { source, name } = req.query;
@@ -14,7 +18,7 @@ const getAll = async (req, res) => {
       response = [...response, ...apiBreeds];
     }
 
-    if (response.length === 0) {      
+    if (response.length === 0) {
       return res.status(404).json({ message: "No results was found" });
     }
     res.json(response);
@@ -26,6 +30,30 @@ const getAll = async (req, res) => {
   }
 };
 
+const getById = async (req, res) => {
+  const { idRaza } = req.params;
+
+  try {
+    if (/^\d+$/.test(idRaza)) {
+      result = await getters.getBreedByIdFromApi(idRaza);
+    } else {
+      result = await getters.getBreedByIdFromDB(idRaza);
+    }
+    
+    if (!result.hasOwnProperty('id')) {
+      res.status(404)
+        .json({ message: `Breed with id -${idRaza}- is not found` });
+    }
+    res.json(result);
+  } catch (error) {
+    res.json({
+      success: false,
+      error: "Something was worng",
+    });
+  }
+};
+
 module.exports = {
   getAll,
+  getById,
 };
