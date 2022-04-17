@@ -6,7 +6,7 @@ const dogData = {
   height: "5 - 10",
   weight: "20 - 25",
   lifespan: "5 - 10",
-  image: "https://fake-image.com"
+  image: "https://fake-image.com",
 };
 
 describe("Dog model", () => {
@@ -28,9 +28,10 @@ describe("Dog model", () => {
 
     describe("name", () => {
       it("should throw an error if name is null", (done) => {
-        Dog.create({})
-          .then(() => done(new Error("It requires a valid name")))
-          .catch(() => done());
+        Dog.create({}).catch((err) => {
+          expect(err.message).to.be.match(/dog.name cannot be null/);
+          done();
+        });
       });
 
       it("should work when its a valid name", async () => {
@@ -41,9 +42,10 @@ describe("Dog model", () => {
 
     describe("height", () => {
       it("should throw an error if height is null", (done) => {
-        Dog.create({})
-          .then(() => done(new Error("It requires a valid height")))
-          .catch(() => done());
+        Dog.create({}).catch((err) => {
+          expect(err.message).to.be.match(/dog.height cannot be null/);
+          done();
+        });
       });
 
       it("should work when its a valid height", async () => {
@@ -54,9 +56,10 @@ describe("Dog model", () => {
 
     describe("weight", () => {
       it("should throw an error if weight is null", (done) => {
-        Dog.create({})
-          .then(() => done(new Error("It requires a valid weight")))
-          .catch(() => done());
+        Dog.create({}).catch((err) => {
+          expect(err.message).to.be.match(/dog.weight cannot be null/);
+          done();
+        });
       });
 
       it("should work when its a valid weight", async () => {
