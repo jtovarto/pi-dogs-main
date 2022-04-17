@@ -15,7 +15,7 @@ const {
   getBreedIdFromDB,
 } = require("../../src/services/breeds");
 
-describe.only("Breed Request Services", () => {
+describe("Breed Request Services", () => {
   before(() =>
     conn.authenticate().catch((err) => {
       console.error("Unable to connect to the database:", err);
@@ -102,8 +102,7 @@ describe.only("Breed Request Services", () => {
     it("should receive an array of results", async () => {
       res = await getBreedFromApi();
       expect(axiosStub.calledOnce).to.be.true;
-
-      axiosStub.restore();
+      
       expect(res).to.be.an("array").that.have.lengthOf(3);
       expect(res[0]).to.include({
         name: apiBreeds[0].id,
@@ -117,16 +116,14 @@ describe.only("Breed Request Services", () => {
 
     it("can get all breeds filtered by name", async () => {
       res = await getBreedFromApi(apiBreeds[2].name);
-
-      axiosStub.restore();
+      
       expect(res).to.be.an("array").that.have.lengthOf(1);
       expect(res[0].id).to.be.equal(apiBreeds[2].id);
     });
 
     it("should return message when no matches", async () => {
       res = await getBreedFromApi("not found");
-
-      axiosStub.restore();
+      
       expect(res).to.be.an("array").that.have.lengthOf(0);
     });    
   });
@@ -134,7 +131,7 @@ describe.only("Breed Request Services", () => {
   describe("Get a breed by ID from DB", () => {
     it("should return a found breed", async () => {
       res = await getBreedIdFromDB(createdDog2.id);
-      console.log(res.id);
+      
       expect(res).to.be.an("object");
       expect(res).to.include({
         id: createdDog2.id,
