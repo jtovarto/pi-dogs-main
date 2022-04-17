@@ -33,10 +33,10 @@ const getById = async (req, res) => {
   const { idRaza } = req.params;
 
   try {
-    if (/^\d+$/.test(idRaza)) {
-      result = await apiRepository.getById(idRaza);
-    } else {
+    if (isNaN(idRaza)) {
       result = await dbRepository.getById(idRaza);
+    } else {
+      result = await apiRepository.getById(idRaza);
     }
 
     if (!result.hasOwnProperty("id")) {
@@ -75,9 +75,8 @@ const create = async (req, res) => {
     await dog.setTemperaments(createdTemperaments);
 
     return res.status(201).json(dog);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Something went wrong" });
+  } catch (error) {    
+    return res.status(400).json({ message: "Something went wrong" });
   }
 };
 
