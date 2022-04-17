@@ -1,8 +1,6 @@
 const getters = require("../services/breeds");
-const {
-  getBreedByIdFromDB,
-  getBreedByIdFromApi,
-} = require("../services/breeds");
+
+const { Dog, Temperament } = require("../../src/db.js");
 
 const getAll = async (req, res) => {
   const { source, name } = req.query;
@@ -39,9 +37,10 @@ const getById = async (req, res) => {
     } else {
       result = await getters.getBreedByIdFromDB(idRaza);
     }
-    
-    if (!result.hasOwnProperty('id')) {
-      res.status(404)
+
+    if (!result.hasOwnProperty("id")) {
+      res
+        .status(404)
         .json({ message: `Breed with id -${idRaza}- is not found` });
     }
     res.json(result);
@@ -53,7 +52,36 @@ const getById = async (req, res) => {
   }
 };
 
+const create = async (req, res) => {
+  const { name, weight, height, lifespan, temperaments, image } = req.body;
+  if (!name || !height || !weight) {
+    return res.status(400).json({ message: "All parameters are required" });
+  }
+
+  try {
+    const dog = await Dog.create({
+      name,
+      weight: `${weight[0]} - ${weight[1]}`,
+      height: `${height[0]} - ${height[1]}`,
+      lifespan: `${lifespan[0]} - ${lifespan[1]}`,
+      image,
+    });
+
+    const createdTemperaments = await Temperament.findAll({
+      where: { id: temperaments },
+    });
+    
+    await dog.setTemperaments(createdTemperaments);
+    
+    return res.status(201).json(dog);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
 module.exports = {
   getAll,
   getById,
+  create,
 };
