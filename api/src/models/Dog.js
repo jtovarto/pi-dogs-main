@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       autoIncrement: false,
       primaryKey: true,
-      defaultValue: nanoid(),
+      defaultValue: () => nanoid(10)
     },
     name: {
       type: DataTypes.STRING,
