@@ -5,18 +5,18 @@
 <br>
 
 # Backend
-- [ ] Debe tener un ruta '/dogs'
-    - [ ] Debe devolver razas
-    - [ ] Debe devolver solo los datos para la ruta principal del frontend
-- [ ] Debe tener un ruta '/dogs?name='
-    - [ ] debe devolver razas filtradas por name
-    - [ ] Si no existe una raza mostrar un mensaje adecuado
-- [ ] Debe tener un ruta '/dogs/{idRaza}'
-    - [ ] Debe retornar una raza en detalle
-    - [ ] Debe retornar solo los datos de detalles de raza
-- [ ] Debe tener un ruta '/dog'
-    - [ ] Recibe los datos recolectados del formulario
-    - [ ] Crea una raza dentro
+- [x] Debe tener un ruta '/dogs'
+    - [x] Debe devolver razas
+    - [x] Debe devolver solo los datos para la ruta principal del frontend
+- [x] Debe tener un ruta '/dogs?name='
+    - [x] Debe devolver razas filtradas por name
+    - [x] Si no existe una raza mostrar un mensaje adecuado
+- [x] Debe tener un ruta '/dogs/{idRaza}'
+    - [x] Debe retornar una raza en detalle
+    - [x] Debe retornar solo los datos de detalles de raza
+- [x] Debe tener un ruta '/dog'
+    - [x] Recibe los datos recolectados del formulario
+    - [x] Crea una raza dentro
 
 <br>
 
