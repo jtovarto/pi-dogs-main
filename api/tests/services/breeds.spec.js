@@ -46,22 +46,28 @@ describe("Breed Request Services", () => {
 
   beforeEach(() => {
     cont = 1;
-    apiBreeds = Array(3).fill({})
-    apiBreeds = apiBreeds.map(item=>({
+    apiBreeds = Array(3).fill({});
+    apiBreeds = apiBreeds.map((item) => ({
       id: cont++,
       weight: {
-        metric: `${faker.datatype.number(1, 5)} - ${faker.datatype.number(6,10)}`,
+        metric: `${faker.datatype.number(1, 5)} - ${faker.datatype.number(
+          6,
+          10
+        )}`,
       },
       height: {
-        metric: `${faker.datatype.number(15, 20)} - ${faker.datatype.number(25,30)}`,
+        metric: `${faker.datatype.number(15, 20)} - ${faker.datatype.number(
+          25,
+          30
+        )}`,
       },
       name: faker.animal.dog(),
       temperament: "Stubborn, Curious, Playful",
       image: {
         url: faker.image.imageUrl(),
       },
-    }))
-    
+    }));
+
     response = apiBreeds;
     const resolved = Promise.resolve({ data: apiBreeds });
     axiosStub = sinon.stub(axios, "get").resolves(resolved);
@@ -102,7 +108,7 @@ describe("Breed Request Services", () => {
     it("should receive an array of results", async () => {
       res = await getBreedFromApi();
       expect(axiosStub.calledOnce).to.be.true;
-      
+
       expect(res).to.be.an("array").that.have.lengthOf(3);
       expect(res[0]).to.include({
         name: apiBreeds[0].id,
@@ -116,22 +122,22 @@ describe("Breed Request Services", () => {
 
     it("can get all breeds filtered by name", async () => {
       res = await getBreedFromApi(apiBreeds[2].name);
-      
+
       expect(res).to.be.an("array").that.have.lengthOf(1);
       expect(res[0].id).to.be.equal(apiBreeds[2].id);
     });
 
     it("should return message when no matches", async () => {
       res = await getBreedFromApi("not found");
-      
+
       expect(res).to.be.an("array").that.have.lengthOf(0);
-    });    
+    });
   });
 
   describe("Get a breed by ID from DB", () => {
     it("should return a found breed", async () => {
       res = await getBreedByIdFromDB(createdDog2.id);
-      
+
       expect(res).to.be.an("object");
       expect(res).to.include({
         id: createdDog2.id,
@@ -152,8 +158,7 @@ describe("Breed Request Services", () => {
     });
   });
 
-  describe("Get a breed by ID from Api", () => {   
-
+  describe("Get a breed by ID from Api", () => {
     it("should return a found breed", async () => {
       res = await getBreedByIdFromApi(response[2].id);
       expect(axiosStub.calledOnce).to.be.true;
@@ -175,12 +180,10 @@ describe("Breed Request Services", () => {
       res = await getBreedByIdFromApi(10);
 
       expect(res).to.be.an("object").that.to.be.empty;
-    });    
+    });
   });
 
   afterEach(() => {
     axiosStub.restore();
   });
-
-  after(() => conn.close());
 });
