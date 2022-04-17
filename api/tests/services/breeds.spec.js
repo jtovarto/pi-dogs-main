@@ -12,7 +12,7 @@ const {
   getBreedFromDB,
   getBreedFromApi,
   getBreedByIdFromApi,
-  getBreedIdFromDB,
+  getBreedByIdFromDB,
 } = require("../../src/services/breeds");
 
 describe("Breed Request Services", () => {
@@ -130,7 +130,7 @@ describe("Breed Request Services", () => {
 
   describe("Get a breed by ID from DB", () => {
     it("should return a found breed", async () => {
-      res = await getBreedIdFromDB(createdDog2.id);
+      res = await getBreedByIdFromDB(createdDog2.id);
       
       expect(res).to.be.an("object");
       expect(res).to.include({

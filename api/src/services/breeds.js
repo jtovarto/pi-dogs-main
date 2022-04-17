@@ -45,7 +45,7 @@ const getBreedFromApi = async (name = "") => {
   }
 };
 
-const getBreedIdFromDB = async (id) => {
+const getBreedByIdFromDB = async (id) => {
   try {
     let results = await Dog.findOne({
       where: { id: id },
@@ -92,5 +92,5 @@ module.exports = {
   getBreedFromDB,
   getBreedFromApi,
   getBreedByIdFromApi,
-  getBreedIdFromDB,
+  getBreedByIdFromDB,
 };
