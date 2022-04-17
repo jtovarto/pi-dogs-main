@@ -7,7 +7,9 @@ const expect = chai.expect;
 const request = require("supertest");
 const app = require("../../src/app.js");
 
-const services = require("../../src/services/breeds");
+const dbRepository = require("../../src/repositories/dbBreed");
+const apiRepository = require("../../src/repositories/apiBreed");
+
 const { nanoid } = require("nanoid");
 const { faker } = require("@faker-js/faker");
 
@@ -30,8 +32,8 @@ describe("Dogs routes", () => {
         temperaments: {},
       };
 
-      fromDbStub = sinon.stub(services, "getBreedFromDB").returns([dbDog]);
-      fromApiStub = sinon.stub(services, "getBreedFromApi").returns([apiDog]);
+      dbStub = sinon.stub(dbRepository, "getAll").returns([dbDog]);
+      apiStub = sinon.stub(apiRepository, "getAll").returns([apiDog]);
     });
 
     describe("GET /dogs?source=", () => {
@@ -39,16 +41,16 @@ describe("Dogs routes", () => {
         const res = await request(app).get("/dogs");
 
         expect(res.statusCode).to.be.equal(200);
-        expect(fromDbStub.calledOnce).to.be.true;
-        expect(fromApiStub.calledOnce).to.be.true;
+        expect(dbStub.calledOnce).to.be.true;
+        expect(apiStub.calledOnce).to.be.true;
         expect(res.body).to.be.an("array").that.have.lengthOf(2);
       });
 
       it("should return only those from the database when prompted", async () => {
         const res = await request(app).get("/dogs").query({ source: "db" });
 
-        expect(fromDbStub.calledOnce).to.be.true;
-        expect(fromApiStub.calledOnce).to.be.false;
+        expect(dbStub.calledOnce).to.be.true;
+        expect(apiStub.calledOnce).to.be.false;
         expect(res.body).to.have.lengthOf(1);
         expect(res.body[0].name).to.be.equal(dbDog.name);
       });
@@ -56,8 +58,8 @@ describe("Dogs routes", () => {
       it("should return only those from the api when prompted", async () => {
         const res = await request(app).get("/dogs").query({ source: "api" });
 
-        expect(fromDbStub.calledOnce).to.be.false;
-        expect(fromApiStub.calledOnce).to.be.true;
+        expect(dbStub.calledOnce).to.be.false;
+        expect(apiStub.calledOnce).to.be.true;
         expect(res.body).to.have.lengthOf(1);
         expect(res.body[0].name).to.be.equal(apiDog.name);
       });
@@ -77,29 +79,29 @@ describe("Dogs routes", () => {
 
     describe("GET /dogs?name=", () => {
       beforeEach(() => {
-        fromDbStub.returns([]);
-        fromApiStub.returns([]);
+        dbStub.returns([]);
+        apiStub.returns([]);
       });
 
       it("should send results filtered by name", async () => {
         await request(app).get("/dogs").query({ name: "name" });
 
-        expect(fromDbStub.calledWith("name")).to.be.true;
-        expect(fromApiStub.calledWith("name")).to.be.true;
+        expect(dbStub.calledWith("name")).to.be.true;
+        expect(apiStub.calledWith("name")).to.be.true;
       });
 
       it("should send filtered results by name only from the db", async () => {
         await request(app).get("/dogs").query({ name: "name", source: "db" });
 
-        expect(fromDbStub.calledWith("name")).to.be.true;
-        expect(fromApiStub.calledOnce).to.be.false;
+        expect(dbStub.calledWith("name")).to.be.true;
+        expect(apiStub.calledOnce).to.be.false;
       });
 
       it("should send filtered results by name only from the db", async () => {
         await request(app).get("/dogs").query({ name: "name", source: "api" });
 
-        expect(fromDbStub.calledOnce).to.be.false;
-        expect(fromApiStub.calledWith("name")).to.be.true;
+        expect(dbStub.calledOnce).to.be.false;
+        expect(apiStub.calledWith("name")).to.be.true;
       });
 
       it("should display a proper message if the breed is not found", async () => {
@@ -117,9 +119,9 @@ describe("Dogs routes", () => {
     describe("error handling", () => {
       beforeEach(() => {
         if (faker.datatype.boolean) {
-          fromDbStub.throws([]);
+          dbStub.throws([]);
         } else {
-          fromApiStub.throws([]);
+          apiStub.throws([]);
         }
       });
 
@@ -133,8 +135,8 @@ describe("Dogs routes", () => {
     });
 
     afterEach(() => {
-      fromDbStub.restore();
-      fromApiStub.restore();
+      dbStub.restore();
+      apiStub.restore();
     });
   });
 
@@ -159,17 +161,15 @@ describe("Dogs routes", () => {
         ...dog,
       };
 
-      idFromDbStub = sinon.stub(services, "getBreedByIdFromDB").returns(dbDog);
-      idFromApiStub = sinon
-        .stub(services, "getBreedByIdFromApi")
-        .returns(apiDog);
+      idDbStub = sinon.stub(dbRepository, "getById").returns(dbDog);
+      idApiStub = sinon.stub(apiRepository, "getById").returns(apiDog);
     });
 
     it("should return only from the database", async () => {
       const res = await request(app).get(`/dogs/${dbDog.id}`);
 
-      expect(idFromDbStub.calledOnce).to.be.true;
-      expect(idFromApiStub.calledOnce).to.be.false;
+      expect(idDbStub.calledOnce).to.be.true;
+      expect(idApiStub.calledOnce).to.be.false;
       expect(res.body).to.be.an("object");
       expect(res.body.name).to.be.equal(dbDog.name);
     });
@@ -177,14 +177,14 @@ describe("Dogs routes", () => {
     it("should return only from the api", async () => {
       const res = await request(app).get(`/dogs/${apiDog.id}`);
 
-      expect(idFromDbStub.calledOnce).to.be.false;
-      expect(idFromApiStub.calledOnce).to.be.true;
+      expect(idDbStub.calledOnce).to.be.false;
+      expect(idApiStub.calledOnce).to.be.true;
       expect(res.body).to.be.an("object");
       expect(res.body.name).to.be.equal(apiDog.name);
     });
 
     it("should return 404 code when breed is not found", async () => {
-      idFromDbStub.returns({});
+      idDbStub.returns({});
       const res = await request(app).get(`/dogs/wrongId`);
 
       expect(res.statusCode).to.be.equal(404);
@@ -194,8 +194,8 @@ describe("Dogs routes", () => {
     });
 
     afterEach(() => {
-      idFromDbStub.restore();
-      idFromApiStub.restore();
+      idDbStub.restore();
+      idApiStub.restore();
     });
   });
 });

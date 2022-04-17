@@ -1,4 +1,5 @@
-const getters = require("../services/breeds");
+const dbRepository = require("../repositories/dbBreed");
+const apiRepository = require("../repositories/apiBreed");
 
 const { Dog, Temperament } = require("../../src/db.js");
 
@@ -7,12 +8,12 @@ const getAll = async (req, res) => {
   let response = [];
   try {
     if (source !== "api") {
-      let dbBreeds = await getters.getBreedFromDB(name);
+      let dbBreeds = await dbRepository.getAll(name);
       response = [...dbBreeds];
     }
 
     if (source !== "db") {
-      let apiBreeds = await getters.getBreedFromApi(name);
+      let apiBreeds = await apiRepository.getAll(name);
       response = [...response, ...apiBreeds];
     }
 
@@ -33,9 +34,9 @@ const getById = async (req, res) => {
 
   try {
     if (/^\d+$/.test(idRaza)) {
-      result = await getters.getBreedByIdFromApi(idRaza);
+      result = await apiRepository.getById(idRaza);
     } else {
-      result = await getters.getBreedByIdFromDB(idRaza);
+      result = await dbRepository.getById(idRaza);
     }
 
     if (!result.hasOwnProperty("id")) {
@@ -70,9 +71,9 @@ const create = async (req, res) => {
     const createdTemperaments = await Temperament.findAll({
       where: { id: temperaments },
     });
-    
+
     await dog.setTemperaments(createdTemperaments);
-    
+
     return res.status(201).json(dog);
   } catch (error) {
     console.log(error);
