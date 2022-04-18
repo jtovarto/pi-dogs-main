@@ -15,7 +15,7 @@ const getFromApi = async () => {
     temperaments = temperaments.map((temp) => ({ name: temp }));
     await Temperament.bulkCreate(temperaments);
   } catch (err) {
-    console.error("There was an error loading the temperaments from API:",err);
+    console.error("There was an error loading the temperaments from API:", err);
   }
 };
 module.exports = {
