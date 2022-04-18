@@ -6,7 +6,7 @@ const expect = chai.expect;
 const { faker } = require("@faker-js/faker");
 
 const { Dog, Temperament, conn } = require("../../src/db.js");
-const { getAll, getById } = require("../../src/repositories/dbBreed");
+const { getAll, getById, create } = require("../../src/repositories/dbBreed");
 
 describe("Breed request from DB", () => {
   before(() =>
@@ -68,8 +68,10 @@ describe("Breed request from DB", () => {
     });
 
     it("should handle exception throws", async () => {
-      const stub = sinon.stub(Dog, "findAll").throws(() => new Error("There was a problem"));
-      stub.restore()
+      const stub = sinon
+        .stub(Dog, "findAll")
+        .throws(() => new Error("There was a problem"));
+      stub.restore();
       try {
         await getAll();
       } catch (error) {
@@ -101,14 +103,170 @@ describe("Breed request from DB", () => {
     });
 
     it("should handle exception throws", async () => {
-        const stub = sinon.stub(Dog, "findOne").throws(() => new Error("There was a problem"));
-        stub.restore()
-        try {
-          await getById(1);
-        } catch (error) {
-          expect(error.message).to.be.match(/There was a problem/);
-        }
-      });
+      const stub = sinon
+        .stub(Dog, "findOne")
+        .throws(() => new Error("There was a problem"));
+      stub.restore();
+      try {
+        await getById(1);
+      } catch (error) {
+        expect(error.message).to.be.match(/There was a problem/);
+      }
+    });
   });
 
+  describe("Create a new breed", () => {
+    let breed = {};
+
+    beforeEach(() => {
+      breed = {
+        name: faker.lorem.word(),
+        image: faker.image.imageUrl(),
+        weight: [10, 15],
+        height: [10, 15],
+        lifespan: [10, 15],
+        temperaments: [1],
+      };
+    });
+
+    it("should create a new breed", async () => {
+      breed.lifespan = null;
+      const dog = await create(breed);
+
+      expect(dog.id).to.not.be.empty;
+      expect(await dog.getTemperaments())
+        .to.be.an("array")
+        .that.have.lengthOf(1);
+    });
+
+    describe("Validation", () => {
+      describe("name field", () => {
+        it("should be required", (done) => {
+          breed.name = null;
+
+          create(breed).catch((err) => {
+            expect(err.message).to.be.match(/required/);
+            done();
+          });
+        });
+
+        it("should not be duplicated", (done) => {
+          create(breed)
+            .then(() => create(breed))
+            .catch((err) => {
+              expect(err.message).to.be.match(/name must be unique/);
+              done();
+            });
+        });
+      });
+
+      describe("weight field", () => {
+        it("should be required", (done) => {
+          breed.weight = null;
+
+          create(breed).catch((err) => {
+            expect(err.message).to.be.match(/required/);
+            done();
+          });
+        });
+
+        it("should be numeric", (done) => {
+          breed.weight = [10, "a"];
+
+          create(breed).catch((err) => {
+            expect(err.message).to.be.match(/must be numeric/);
+            done();
+          });
+        });
+
+        it("should have min and max values", (done) => {
+          breed.weight = [10];
+
+          create(breed).catch((err) => {
+            expect(err.message).to.be.match(
+              /must provide a minimum and maximum/
+            );
+            done();
+          });
+        });
+      });
+
+      describe("height field", () => {
+        it("should be required", (done) => {
+          breed.height = null;
+
+          create(breed).catch((err) => {
+            expect(err.message).to.be.match(/required/);
+            done();
+          });
+        });
+
+        it("should be numeric", (done) => {
+          breed.height = [10, "a"];
+
+          create(breed).catch((err) => {
+            expect(err.message).to.be.match(/must be numeric/);
+            done();
+          });
+        });
+
+        it("should have min and max values", (done) => {
+          breed.height = [10];
+
+          create(breed).catch((err) => {
+            expect(err.message).to.be.match(
+              /must provide a minimum and maximum/
+            );
+            done();
+          });
+        });
+      });
+
+      describe("lifespan field", () => {
+        it("should be numeric", (done) => {
+          breed.lifespan = [10, "a"];
+
+          create(breed).catch((err) => {
+            expect(err.message).to.be.match(/must be numeric/);
+            done();
+          });
+        });
+
+        it("should have min and max values", (done) => {
+          breed.lifespan = [10];
+
+          create(breed).catch((err) => {
+            expect(err.message).to.be.match(
+              /must provide a minimum and maximum/
+            );
+            done();
+          });
+        });
+      });
+
+      it("image can be nullable", (done) => {
+        breed.image = null;
+        create(breed).then((dog) => {
+          expect(dog.id).to.not.be.empty;
+          done();
+        });
+      });
+
+      it("lifespan can be nullable", (done) => {
+        breed.lifespan = null;
+        create(breed).then((dog) => {
+          expect(dog.lifespan).to.be.equal("0 - 0 years");
+          done();
+        });
+      });
+
+      it("temperaments can be nullable", (done) => {
+        breed.temperaments = null;
+        create(breed).then((dog) => {
+          expect(dog.id).to.not.be.empty;
+          done();
+        });
+      });
+    });
+  });
 });
