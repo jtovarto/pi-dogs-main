@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 const chai = require("chai");
-const sinon = require("sinon");
 const expect = chai.expect;
 
 const { Dog, Temperament, conn } = require("../../src/db.js");
@@ -29,7 +28,7 @@ describe("POST /dog", () => {
     const res = await request(app).post("/dog");
     expect(res.statusCode).to.be.equal(400);
     expect(res.body).to.be.deep.equal({
-      message: "All parameters are required",
+      message: "Fields name-height-weight are required",
     });
   });
 
