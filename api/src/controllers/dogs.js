@@ -22,7 +22,6 @@ const getAll = async (req, res) => {
     }
     res.json(response);
   } catch (error) {
-    
     res.json({
       success: false,
       error: "Something was worng",
@@ -55,35 +54,12 @@ const getById = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const { name, weight, height, lifespan, temperaments, image } = req.body;
-  if (!name || !height || !weight) {
-    return res.status(400).json({ message: "All parameters are required" });
-  }
-
   try {
-    const dog = await Dog.create({
-      name,
-      weight: `${weight[0]} - ${weight[1]}`,
-      height: `${height[0]} - ${height[1]}`,
-      lifespan: `${lifespan[0]} - ${lifespan[1]}`,
-      image,
-    });
-    const createdTemperaments = await Temperament.findAll({
-      where: { id: temperaments },
-    });
-
-    await dog.setTemperaments(createdTemperaments);
+    const dog = await dbRepository.create(req.body);
 
     return res.status(201).json(dog);
   } catch (error) {
-    if (
-      error.errors.length > 0 &&
-      error.errors[0].message === "name must be unique"
-    ) {
-      return res.status(400).json({ message: error.errors[0].message });
-    }
-
-    return res.status(400).json({ message: "Something went wrong" });
+    return res.status(400).json({ message: error.message });
   }
 };
 
