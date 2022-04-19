@@ -23,7 +23,7 @@ const { getFromApi } = require("./src/services/temperament");
 // Syncing all the models at once.
 conn.sync({ force: true })
   .then(() => {    
-    return getFromApi()
+    //return getFromApi()
   })
   .then(() => {
     server.listen(3001, () => {
