@@ -11,8 +11,9 @@ const Navbar = () => {
   return (
     <nav className={styles.nav}>
       <Link to="/">{lang("Home")}</Link>
-      <div>
-        <span onClick={changeLang}>{locale}</span>
+      <div style={{ display:'flex', aligItems:'center', gap:'1rem' }}>
+        <Link to="/create">Create</Link>
+        <a onClick={changeLang}>{locale}</a>
       </div>
     </nav>
   );
