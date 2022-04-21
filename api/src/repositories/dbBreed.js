@@ -12,7 +12,13 @@ const getAll = async (name = "") => {
         through: { attributes: [] },
       },
     });
-    return results;
+    return results.map((temper) => ({
+      id: temper.id,
+      name: temper.name,
+      weight: temper.weight,
+      image: temper.image,
+      temperaments: mapTempers(temper.temperaments),
+    }));
   } catch (error) {
     throw new Error(error.message);
   }
@@ -20,7 +26,7 @@ const getAll = async (name = "") => {
 
 const getById = async (id) => {
   try {
-    let results = await Dog.findOne({
+    let result = await Dog.findOne({
       where: { id: id.toString() },
       attributes: ["id", "name", "weight", "image", "height", "lifespan"],
       include: {
@@ -30,8 +36,17 @@ const getById = async (id) => {
       },
     });
 
-    if (results === null) return {};
-    return results;
+    if (result === null) return {};
+
+    return {
+      id: result.id,
+      name: result.name,
+      weight: result.weight,
+      height: result.height,
+      lifespan: result.lifespan,
+      image: result.image,
+      temperaments: mapTempers(result.temperaments),
+    };
   } catch (error) {
     throw new Error(error.message);
   }
@@ -66,6 +81,14 @@ const create = async (value) => {
     throw new Error(error.message);
   }
 };
+
+function mapTempers(tempers) {
+  if (tempers === undefined || tempers.length < 1) {
+    return [];
+  }
+
+  return tempers?.map((temper) => temper.name);
+}
 
 function matrixFormat(array) {
   if (array.length < 2) {

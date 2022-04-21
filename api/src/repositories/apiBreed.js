@@ -50,8 +50,7 @@ function mapTempers(tempers) {
   if (tempers === undefined || tempers.length < 1) {
     return [];
   }
-  
-  return tempers?.split(",").map((temper) => ({ name: temper.trim() }));
+  return tempers?.split(",").map((temper) => temper.trim());
 }
 
 module.exports = {

@@ -31,7 +31,7 @@ describe("Breed request from DB", () => {
     createdDog1 = await Dog.create(dogs[0]);
     createdDog2 = await Dog.create(dogs[1]);
 
-    let temperament = { name: faker.lorem.word() };
+    temperament = { name: faker.lorem.word() };
     createdTem = await Temperament.create(temperament);
 
     await createdDog1.setTemperaments(createdTem);
@@ -48,6 +48,15 @@ describe("Breed request from DB", () => {
         image: createdDog1.image,
         weight: createdDog1.weight,
       });
+
+      expect(res[0].temperaments).to.be.an("array").to.have.lengthOf(1);
+      expect(res[0].temperaments[0]).to.equal(temperament.name);
+    });
+
+    it("should return an empty array when there isn't a temperament", async () => {
+      let res = await getAll();
+
+      expect(res[1].temperaments).to.be.an("array").to.have.lengthOf(0);
     });
 
     it("can get all breeds filtered by name", async () => {
@@ -82,17 +91,24 @@ describe("Breed request from DB", () => {
 
   describe("Get a breed by ID from DB", () => {
     it("should return a found breed", async () => {
-      let res = await getById(createdDog2.id);
+      let res = await getById(createdDog1.id);
 
       expect(res).to.be.an("object");
       expect(res).to.include({
-        id: createdDog2.id,
-        name: createdDog2.name,
-        image: createdDog2.image,
-        weight: createdDog2.weight,
-        height: createdDog2.height,
-        lifespan: createdDog2.lifespan,
+        id: createdDog1.id,
+        name: createdDog1.name,
+        image: createdDog1.image,
+        weight: createdDog1.weight,
+        height: createdDog1.height,
+        lifespan: createdDog1.lifespan,
       });
+      expect(res.temperaments).to.be.an("array").to.have.lengthOf(1);
+      expect(res.temperaments[0]).to.equal(temperament.name);
+    });
+
+    it("should return an empty array when there isn't a temperament", async () => {
+      let res = await getById(createdDog2.id);
+
       expect(res.temperaments).to.be.an("array").to.have.lengthOf(0);
     });
 

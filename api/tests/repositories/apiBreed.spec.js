@@ -16,21 +16,31 @@ describe("Breed request from Api", () => {
 
   beforeEach(() => {
     cont = 1;
-    fakeData = Array(3).fill({});
-    fakeData = fakeData.map((item) => ({
-      id: cont++,
+    fakeData = Array(2).fill({});
+    let info = {
       weight: {
         metric: "5 - 10",
       },
       height: {
         metric: "25 - 30",
       },
-      name: faker.animal.dog(),
+      life_span: "25 - 30 years",
       temperament: "Stubborn, Curious, Playful",
       image: {
         url: faker.image.imageUrl(),
       },
+    };
+    fakeData = fakeData.map((item) => ({
+      id: cont++,
+      ...info,
+      name: faker.animal.dog(),
     }));
+    fakeData.push({
+      id: cont++,
+      ...info,
+      name: faker.animal.dog(),
+      temperament: "",
+    });
 
     axiosFakeResponse = Promise.resolve({ data: fakeData });
     axiosStub = sinon.stub(axios, "get");
@@ -44,23 +54,28 @@ describe("Breed request from Api", () => {
 
       expect(axiosStub.calledOnce).to.be.true;
       expect(res).to.be.an("array").that.have.lengthOf(3);
-      expect(res[0]).to.include({
-        name: fakeData[0].id,
+      expect(res[0]).to.deep.equals({
+        id: fakeData[0].id,
         name: fakeData[0].name,
         image: fakeData[0].image.url,
         weight: fakeData[0].weight.metric,
+        temperaments: ["Stubborn", "Curious", "Playful"],
       });
-      expect(res[0].temperaments).to.be.an("array").to.have.lengthOf(3);
-      expect(res[0].temperaments[0]).to.haveOwnProperty("name");
     });
 
     it("can get all breeds filtered by name", async () => {
       axiosStub.resolves(axiosFakeResponse);
-
+      
       let res = await getAll(fakeData[2].name);
 
       expect(res).to.be.an("array").that.have.lengthOf(1);
-      expect(res[0].id).to.be.equal(fakeData[2].id);
+      expect(res[0]).to.deep.equals({
+        id: fakeData[2].id,
+        name: fakeData[2].name,
+        image: fakeData[2].image.url,
+        weight: fakeData[2].weight.metric,
+        temperaments: [],
+      });
     });
 
     it("should return message when no matches", async () => {
@@ -89,16 +104,15 @@ describe("Breed request from Api", () => {
 
       expect(axiosStub.calledOnce).to.be.true;
       expect(res).to.be.an("object");
-      expect(res).to.include({
+      expect(res).to.deep.equals({
         id: fakeData[2].id,
         name: fakeData[2].name,
         image: fakeData[2].image.url,
         weight: fakeData[2].weight.metric,
         height: fakeData[2].height.metric,
         lifespan: fakeData[2].life_span,
+        temperaments: [],
       });
-      expect(res.temperaments).to.be.an("array").to.have.lengthOf(3);
-      expect(res.temperaments[0]).to.haveOwnProperty("name");
     });
 
     it("should return a empty object when breed is not found", async () => {
