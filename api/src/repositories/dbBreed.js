@@ -15,7 +15,7 @@ const getAll = async (name = "") => {
     return results.map((temper) => ({
       id: temper.id,
       name: temper.name,
-      weight: temper.weight,
+      weight: temper.weight.split("-").map((value) => +value),
       image: temper.image,
       temperaments: mapTempers(temper.temperaments),
     }));
@@ -41,7 +41,7 @@ const getById = async (id) => {
     return {
       id: result.id,
       name: result.name,
-      weight: result.weight,
+      weight: result.weight.split("-").map((value) => +value),
       height: result.height,
       lifespan: result.lifespan,
       image: result.image,

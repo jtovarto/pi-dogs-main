@@ -11,7 +11,7 @@ const getAll = async (name = "") => {
         formatted.push({
           id: breed.id,
           name: breed.name,
-          weight: breed.weight.metric,
+          weight: breed.weight.metric.split("-").map((value) => +value),
           image: breed.image.url,
           temperaments: mapTempers(breed.temperament),
         });
@@ -33,7 +33,7 @@ const getById = async (id) => {
     formatted = {
       id: found.id,
       name: found.name,
-      weight: found.weight.metric,
+      weight: found.weight.metric.split("-").map((value) => +value),
       height: found.height.metric,
       image: found.image.url,
       lifespan: found.life_span,

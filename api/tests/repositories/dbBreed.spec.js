@@ -42,11 +42,12 @@ describe("Breed request from DB", () => {
       let res = await getAll();
 
       expect(res).to.be.an("array").that.have.lengthOf(2);
-      expect(res[0]).to.include({
+      
+      expect(res[0]).to.deep.includes({
         id: createdDog1.id,
         name: createdDog1.name,
         image: createdDog1.image,
-        weight: createdDog1.weight,
+        weight: [10, 15],
       });
 
       expect(res[0].temperaments).to.be.an("array").to.have.lengthOf(1);
@@ -63,10 +64,10 @@ describe("Breed request from DB", () => {
       let res = await getAll(createdDog2.name);
 
       expect(res).to.be.an("array").that.have.lengthOf(1);
-      expect(res[0]).to.include({
+      expect(res[0]).to.deep.includes({
         name: createdDog2.name,
         image: createdDog2.image,
-        weight: createdDog2.weight,
+        weight: [10, 15],
       });
     });
 
@@ -94,11 +95,11 @@ describe("Breed request from DB", () => {
       let res = await getById(createdDog1.id);
 
       expect(res).to.be.an("object");
-      expect(res).to.include({
+      expect(res).to.deep.includes({
         id: createdDog1.id,
         name: createdDog1.name,
         image: createdDog1.image,
-        weight: createdDog1.weight,
+        weight: [10, 15],
         height: createdDog1.height,
         lifespan: createdDog1.lifespan,
       });

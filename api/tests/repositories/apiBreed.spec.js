@@ -19,7 +19,7 @@ describe("Breed request from Api", () => {
     fakeData = Array(2).fill({});
     let info = {
       weight: {
-        metric: "5 - 10",
+        metric: "10 - 15",
       },
       height: {
         metric: "25 - 30",
@@ -51,21 +51,21 @@ describe("Breed request from Api", () => {
       axiosStub.resolves(axiosFakeResponse);
 
       let res = await getAll();
-
+      
       expect(axiosStub.calledOnce).to.be.true;
       expect(res).to.be.an("array").that.have.lengthOf(3);
       expect(res[0]).to.deep.equals({
         id: fakeData[0].id,
         name: fakeData[0].name,
         image: fakeData[0].image.url,
-        weight: fakeData[0].weight.metric,
+        weight: [10, 15],
         temperaments: ["Stubborn", "Curious", "Playful"],
       });
     });
 
     it("can get all breeds filtered by name", async () => {
       axiosStub.resolves(axiosFakeResponse);
-      
+
       let res = await getAll(fakeData[2].name);
 
       expect(res).to.be.an("array").that.have.lengthOf(1);
@@ -73,7 +73,7 @@ describe("Breed request from Api", () => {
         id: fakeData[2].id,
         name: fakeData[2].name,
         image: fakeData[2].image.url,
-        weight: fakeData[2].weight.metric,
+        weight: [10, 15],
         temperaments: [],
       });
     });
@@ -108,7 +108,7 @@ describe("Breed request from Api", () => {
         id: fakeData[2].id,
         name: fakeData[2].name,
         image: fakeData[2].image.url,
-        weight: fakeData[2].weight.metric,
+        weight: [10, 15],
         height: fakeData[2].height.metric,
         lifespan: fakeData[2].life_span,
         temperaments: [],
