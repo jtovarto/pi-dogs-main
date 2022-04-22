@@ -1,10 +1,10 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 
-import Home from "./Pages/Home";
-import Main from "./Pages/Main";
-import Detail from "./Pages/Detail";
-import FormCreate from "./Pages/FormCreate";
+import Home from "./pages/Home";
+import Main from "./pages/Main";
+import Detail from "./pages/Detail";
+import FormCreate from "./pages/FormCreate";
 
 function App() {
   return (
