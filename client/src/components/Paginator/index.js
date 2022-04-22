@@ -1,23 +1,21 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import useLang from "../../Utils/Lang/useLang";
+import useLang from "../../utils/Lang/useLang";
 
 import styles from "./Paginator.module.css";
 
-const Paginator = ({ storeBreeds, setPage }) => {
+const Paginator = ({ count, setPage }) => {
   const [, , lang] = useLang();
 
-  const [setPageCount] = useState([1]);
-
   const pagesCount = () => {
-    const max = Math.ceil((storeBreeds.length  ?? 0) / 8);
-    const pages = [];
-    for (let i = 1; i <= max; i++) {
+    const max = Math.ceil(count / 8);
+    const pages = [1];
+    for (let i = 2; i <= max; i++) {
       pages.push(i);
     }
     return pages.map((value) => (
-      <a href="#/" key={value} onClick={() => setPage(value)}>
+      <a href="#/" key={"pag" + value} onClick={() => setPage(value)}>
         {value}
       </a>
     ));

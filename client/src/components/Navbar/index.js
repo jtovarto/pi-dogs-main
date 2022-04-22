@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useLang from "../../Utils/Lang/useLang";
+import useLang from "../../utils/Lang/useLang";
 import styles from "./Navbar.module.css";
 const Navbar = () => {
   const [locale, changeLocale, lang] = useLang();
