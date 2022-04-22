@@ -11,7 +11,7 @@ const getAll = async (name = "") => {
         formatted.push({
           id: breed.id,
           name: breed.name,
-          weight: breed.weight.metric.split("-").map((value) => +value),
+          weight: mapWeigth(breed.weight.metric),
           image: breed.image.url,
           temperaments: mapTempers(breed.temperament),
         });
@@ -33,7 +33,7 @@ const getById = async (id) => {
     formatted = {
       id: found.id,
       name: found.name,
-      weight: found.weight.metric.split("-").map((value) => +value),
+      weight: mapWeigth(found.weight.metric),
       height: found.height.metric,
       image: found.image.url,
       lifespan: found.life_span,
@@ -51,6 +51,13 @@ function mapTempers(tempers) {
     return [];
   }
   return tempers?.split(",").map((temper) => temper.trim());
+}
+
+function mapWeigth(weight) {
+  let [min, max] = weight.split("-");
+  min = isNaN(min) ? "x" : +min;
+  max = isNaN(max) ? "x" : +max;
+  return [min, max];
 }
 
 module.exports = {
