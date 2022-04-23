@@ -19,17 +19,24 @@ describe("Breed request from DB", () => {
     await Dog.sync({ force: true });
     await Temperament.sync({ force: true });
 
-    let dogs = Array(2).fill({});
-    dogs = dogs.map((item) => ({
-      name: faker.lorem.word(),
+    let dog01 = {
+      name: 'Dog name 01',
       image: faker.image.imageUrl(),
       weight: "10 - 15",
       height: "10 - 15",
       lifespan: "10 - 15",
-    }));
+    }
 
-    createdDog1 = await Dog.create(dogs[0]);
-    createdDog2 = await Dog.create(dogs[1]);
+    let dog02 = {
+      name: 'Dog name 02',
+      image: faker.image.imageUrl(),
+      weight: "10 - 15",
+      height: "10 - 15",
+      lifespan: "10 - 15",
+    }   
+
+    createdDog1 = await Dog.create(dog01);
+    createdDog2 = await Dog.create(dog02);
 
     temperament = { name: faker.lorem.word() };
     createdTem = await Temperament.create(temperament);
@@ -73,7 +80,7 @@ describe("Breed request from DB", () => {
 
     it("should return message when no matches", async () => {
       let res = await getAll("not found");
-
+      
       expect(res).to.be.an("array").that.have.lengthOf(0);
     });
 
@@ -135,7 +142,8 @@ describe("Breed request from DB", () => {
   describe("Create a new breed", () => {
     let breed = {};
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      await Dog.sync({ force: true });
       breed = {
         name: faker.lorem.word(),
         image: faker.image.imageUrl(),
