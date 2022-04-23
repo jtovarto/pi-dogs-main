@@ -2,6 +2,8 @@ import axios from "axios";
 
 export const GET_ALL_BREEDS = "GET_ALL_BREEDS";
 export const GET_ALL_TEMPERAMENTS = "GET_ALL_TEMPERAMENTS";
+export const GET_BREED_BY_ID = "GET_BREED_BY_ID";
+export const CLEAR_BREED_BY_ID  = "CLEAR_BREED_BY_ID ";
 
 export function getAllBreeds(name, source) {
   return function (dispatch) {
@@ -11,7 +13,7 @@ export function getAllBreeds(name, source) {
       query ? (query += "&") : (query += "?");
       query += "source=" + source;
     }
-    
+
     return axios("http://localhost:3001/dogs" + query)
       .then((response) => {
         dispatch({
@@ -34,6 +36,23 @@ export function getAllTemperaments() {
       })
       .catch((err) => console.log(err));
   };
+}
+
+export function getBreedById(id) {
+  return function (dispatch) {
+    return axios("http://localhost:3001/dogs/" + id)
+      .then((response) => {
+        dispatch({
+          type: GET_BREED_BY_ID,
+          payload: response.data,
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+}
+
+export function clearBreedById() {
+  return { type: CLEAR_BREED_BY_ID };
 }
 
 export const getBreedsByName = () => {

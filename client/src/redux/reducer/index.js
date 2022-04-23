@@ -1,4 +1,9 @@
-import { GET_ALL_BREEDS, GET_ALL_TEMPERAMENTS } from "../actions";
+import {
+  GET_ALL_BREEDS,
+  GET_ALL_TEMPERAMENTS,
+  GET_BREED_BY_ID,
+  CLEAR_BREED_BY_ID,
+} from "../actions";
 
 const initialState = {
   allBreeds: [],
@@ -21,6 +26,18 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         allTempers: payload,
+      };
+    }
+    case GET_BREED_BY_ID: {
+      return {
+        ...state,
+        breed: payload,
+      };
+    }
+    case CLEAR_BREED_BY_ID: {
+      return {
+        ...state,
+        breed: {},
       };
     }
     default:

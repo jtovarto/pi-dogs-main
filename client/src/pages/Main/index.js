@@ -42,9 +42,13 @@ const Main = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllBreeds());
-    dispatch(getAllTemperaments());
-  }, []);
+    if (storeBreeds.length <= 0) {
+      dispatch(getAllBreeds());
+    }
+    if (storeTempers.length <= 0) {
+      dispatch(getAllTemperaments());
+    }
+  }, [storeBreeds, storeTempers, dispatch]);
 
   let orderByCallbacks = {
     name: (a, b) => {
