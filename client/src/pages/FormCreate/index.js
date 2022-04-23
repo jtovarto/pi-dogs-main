@@ -5,12 +5,13 @@ import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import styles from "./FormCreate.module.css";
 
+import { validate } from "../../hooks/useValidator";
+
 import { getAllTemperaments, createBreed } from "../../redux/actions";
 
 const FormCreate = () => {
   const storeTempers = useSelector((state) => state.allTempers);
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (storeTempers.length <= 0) {
       dispatch(getAllTemperaments());
@@ -62,6 +63,23 @@ const FormCreate = () => {
   }; */
   const handleOnSubmit = (e) => {
     e.preventDefault();
+    
+    const validated = validate(input, {
+      name: "isRequired|isString",
+      weight_min: "isRequired|isNumber|isBetween:1,20|isLessThan:weight_max",
+      weight_max: "isRequired|isNumber|isBetween:1,20|isGreaterThan:weight_min",
+      height_min: "isRequired|isNumber|isBetween:1,20|isLessThan:height_max",
+      height_max: "isRequired|isNumber|isBetween:1,20|isGreaterThan:height_min",
+      lifespan_min: "isRequired|isNumber|isBetween:1,20|isLessThan:lifespan_max",
+      lifespan_max: "isRequired|isNumber|isBetween:1,20|isGreaterThan:lifespan_min",
+      temperaments: "isArray",
+      image: "isRequired|isImage",
+    });
+
+    if (!validated){
+      return;
+    }
+
     let data = {
       name: input.name,
       weight: [input.weight_min, input.weight_max],
@@ -70,8 +88,7 @@ const FormCreate = () => {
       temperaments: input.temperaments,
       image: input.image,
     };
-    
-    dispatch(createBreed(data));
+    //dispatch(createBreed(data));
   };
   return (
     <div>
