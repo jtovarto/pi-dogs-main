@@ -5,9 +5,13 @@ import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Paginator from "../../components/Paginator";
 
-import useLang from "../../utils/Lang/useLang";
+/* import useLang from "../../utils/Lang/useLang"; */
 
-import { getAllBreeds, getAllTemperaments } from "../../redux/actions";
+import {
+  getAllBreeds,
+  getAllTemperaments,
+  getBreedsByName,
+} from "../../redux/actions";
 
 import styles from "./Main.module.css";
 
@@ -17,18 +21,29 @@ const Main = () => {
   const [temper, setTemper] = useState("all");
   const [count, setCount] = useState([1]);
   const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState([]);
+
+  const [breedName, setBreedName] = useState("");
+
+  let filterTimeout;
+
+  const handleOnChange = (e) => {
+    e.preventDefault();
+    let name = e.target.value;
+    clearTimeout(filterTimeout);
+    if (!name) return dispatch(getAllBreeds());
+
+    filterTimeout = setTimeout(() => {
+      dispatch(getAllBreeds(name));
+    }, 500);
+  };
 
   const [orderBy, setOrderBy] = useState("1_name");
 
   const dispatch = useDispatch();
 
-  const getBreeds = getAllBreeds(dispatch);
-  const getTempers = getAllTemperaments(dispatch);
-
   useEffect(() => {
-    getBreeds();
-    getTempers();
+    dispatch(getAllBreeds());
+    dispatch(getAllTemperaments());
   }, []);
 
   let orderByCallbacks = {
@@ -74,40 +89,44 @@ const Main = () => {
 
     if (count !== breeds.length) setCount(breeds.length);
 
-    return breeds.slice(init, init + 8).map((breed) => (
-      <Link to={"/detail/" + breed.id} key={breed.id}>
-        <div className={styles.card}>
-          {breed.name}
-          <div
-            style={{
-              color: "black",
-              fontSize: "0.75rem",
-            }}
-          >
-            {breed.temperaments &&
-              breed.temperaments.map((temper) => (
-                <p key={breed.id + temper}>{temper}</p>
-              ))}
+    if (count > 0) {
+      return breeds.slice(init, init + 8).map((breed) => (
+        <Link to={"/detail/" + breed.id} key={breed.id}>
+          <div className={styles.card}>
+            {breed.name}
+            <div
+              style={{
+                color: "black",
+                fontSize: "0.75rem",
+              }}
+            >
+              {breed.temperaments &&
+                breed.temperaments.map((temper) => (
+                  <p key={breed.id + temper}>{temper}</p>
+                ))}
 
-            <br />
+              <br />
 
-            <p>
-              {breed.weight[0]}-{breed.weight[1]}
-            </p>
+              <p>
+                {breed.weight[0]}-{breed.weight[1]}
+              </p>
+            </div>
           </div>
-        </div>
-      </Link>
-    ));
+        </Link>
+      ));
+    }
+
+    return <p>No results</p>;
   };
 
-  const [, changeLang, lang] = useLang();
+  /* const [, changeLang, lang] = useLang(); */
   /* useEffect(()=>{
     changeLang('es')
   }) */
-
+  /* 
   const onChangeLang = (lang) => {
     changeLang(lang);
-  };
+  }; */
 
   return (
     <>
@@ -115,9 +134,12 @@ const Main = () => {
       <div className={styles.container}>
         <div className={styles.panel}>
           <div className={styles.filter_panel}>
-            <label htmlFor="">
+            <label htmlFor="temperamentFilter">
               Filter by Temper:
-              <select name="" id="" onChange={(e) => setTemper(e.target.value)}>
+              <select
+                id="temperamentFilter"
+                onChange={(e) => setTemper(e.target.value)}
+              >
                 <option value="all">All temperaments</option>
                 {storeTempers &&
                   storeTempers.map((temper) => (
@@ -125,15 +147,15 @@ const Main = () => {
                   ))}
               </select>
             </label>
-            <label htmlFor="">
+
+            <label htmlFor="breedFilter">
               Filter by Breed:
-              <select name="" id="">
-                <option value="1">Breed</option>
-              </select>
+              <input
+                onChange={handleOnChange}
+                style={{ border: "1px solid black", padding: "1rem" }}
+              />
             </label>
           </div>
-
-          <div></div>
 
           <div>
             <label htmlFor="">
@@ -153,8 +175,8 @@ const Main = () => {
         </div>
 
         <br></br>
-        <hr></hr>
-
+        <p>Results ({count})</p>
+        <br></br>
         <div className={styles.content}>{storeBreeds && print()}</div>
       </div>
 
