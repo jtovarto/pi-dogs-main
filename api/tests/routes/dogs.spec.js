@@ -104,15 +104,12 @@ describe("Dogs routes", () => {
         expect(apiStub.calledWith("name")).to.be.true;
       });
 
-      it("should display a proper message if the breed is not found", async () => {
+      it("should return a empty array when breed name is not found", async () => {
         const res = await request(app)
           .get("/dogs")
           .query({ name: "not found" });
 
-        expect(res.statusCode).to.be.equal(404);
-        expect(res.body).to.be.include({
-          message: "No results was found",
-        });
+        expect(res.body).to.be.an("array").that.lengthOf(0);
       });
     });
 

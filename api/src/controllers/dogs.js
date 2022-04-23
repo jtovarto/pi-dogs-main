@@ -17,9 +17,6 @@ const getAll = async (req, res) => {
       response = [...response, ...apiBreeds];
     }
 
-    if (response?.length === 0) {
-      return res.status(404).json({ message: "No results was found" });
-    }
     res.json(response);
   } catch (error) {
     res.json({
