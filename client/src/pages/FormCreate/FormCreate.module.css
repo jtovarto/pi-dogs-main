@@ -1,0 +1,20 @@
+.form {
+    width: 50vw;
+    margin: auto;
+    border: 1px solid black;
+    border-radius: .5rem;
+    padding: 1rem;
+}
+
+.input_wrapper {
+    display: flex;
+    gap: .25rem;
+    justify-content: center;
+    padding: .25rem;
+}
+
+.input {
+    border: 1px solid black;
+    padding: .25rem;
+    width: 35%;
+}
