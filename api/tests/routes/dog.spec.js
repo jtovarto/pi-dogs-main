@@ -27,7 +27,7 @@ describe("POST /dog", () => {
   it("should return status 400 and corresponding text if any of the mandatory parameters is not send", async () => {
     const res = await request(app).post("/dog");
     expect(res.statusCode).to.be.equal(400);
-    expect(res.body).to.be.deep.equal({
+    expect(res.body).to.be.deep.equals({
       message: "Fields name-height-weight are required",
     });
   });
