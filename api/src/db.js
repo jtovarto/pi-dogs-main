@@ -2,18 +2,18 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST, APP_ENV } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, NODE_ENV } = process.env;
 
 let connection;
 let options;
 
-if (APP_ENV === "local") {
+if (NODE_ENV === "local") {
   connection = `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/dogs`;
   options = {
     logging: false,
     native: false,
   };
-} else if (APP_ENV === "production") {
+} else if (NODE_ENV === "production") {
   connection = process.env.DATABASE_URL;
   options = {
     dialectOptions: {
