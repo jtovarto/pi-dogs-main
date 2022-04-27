@@ -2,15 +2,31 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, APP_ENV } = process.env;
 
-const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/dogs`,
-  {
-    logging: false, // set to console.log to see the raw SQL queries
-    native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-  }
-);
+let connection;
+let options;
+
+if (APP_ENV === "local") {
+  connection = `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/dogs`;
+  options = {
+    logging: false,
+    native: false,
+  };
+} else if (APP_ENV === "production") {
+  connection = process.env.DATABASE_URL;
+  options = {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  };
+}
+
+const sequelize = new Sequelize(connection, options);
+
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
@@ -40,8 +56,8 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Dog, Temperament } = sequelize.models;
 
 // Aca vendrian las relaciones
-Dog.belongsToMany(Temperament, { through: 'DogTemperaments' })
-Temperament.belongsToMany(Dog, { through: 'DogTemperaments' })
+Dog.belongsToMany(Temperament, { through: "DogTemperaments" });
+Temperament.belongsToMany(Dog, { through: "DogTemperaments" });
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
