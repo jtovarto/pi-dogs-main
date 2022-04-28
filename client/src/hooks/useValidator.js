@@ -1,28 +1,27 @@
 const validators = {
-  
-    isString: (data, name) => typeof data[name] === "string",
+  isString: (data, name) => typeof data[name] === "string",
 
   isNumber: (data, name) => !isNaN(data[name]),
-  
+
   isBetween: (data, name, compare) => {
     const [min, max] = compare.split(",");
-    return data[name] > min && data[name] < max;
+    return +data[name] >= +min && +data[name] <= +max;
   },
-  
+
   isLessThan: (data, name, compare) => data[name] < data[compare],
-  
+
   isGreaterThan: (data, name, compare) => data[name] > data[compare],
-  
+
   isImage: (data, name) => /(https?:\/\/.*\.(?:png|jpg|gif))/.test(data[name]),
-  
+
   isRequired: (data, name) =>
     data[name] !== undefined &&
     data[name] !== null &&
     data[name] !== [] &&
     data[name] !== {} &&
     data[name] !== "",
-  
-    isArray: (data, name) => Array.isArray(data[name]),
+
+  isArray: (data, name) => Array.isArray(data[name]),
 };
 
 const messages = {
@@ -46,17 +45,21 @@ const messages = {
 };
 
 export const validate = function (inputs, rules, callback) {
+  let errors = {};
   for (const property in inputs) {
-
     const rulesArray = rules[property].split("|");
 
     for (const ruleString of rulesArray) {
-      
-        const [rule, compare] = ruleString.split(":");
-
-      if (!validators[rule](inputs, property, compare)) {
-        console.log(messages[rule](property, compare));
+      const [rule, compare] = ruleString.split(":");
+      const validated = validators[rule](inputs, property, compare);
+      if (!validated) {
+        const message = messages[rule](property, compare);
+        if (!errors[property]?.length) errors[property] = [];
+        errors[property].push(message);
       }
     }
   }
+
+  callback(errors);
+  return Object.keys(errors).length === 0;
 };
