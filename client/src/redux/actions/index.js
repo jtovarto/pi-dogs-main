@@ -9,6 +9,8 @@ export const NOTIFY = "NOTIFY";
 
 export const CLEAR_NOTIFICATION = "CLEAR_NOTIFICATION";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+
 export function getAllBreeds(name, source) {
   return function (dispatch) {
     let query = "";
@@ -18,7 +20,7 @@ export function getAllBreeds(name, source) {
       query += "source=" + source;
     }
 
-    return axios("http://localhost:3001/dogs" + query)
+    return axios(`${API_URL}/dogs${query}`)
       .then((response) => {
         dispatch({
           type: GET_ALL_BREEDS,
@@ -31,7 +33,7 @@ export function getAllBreeds(name, source) {
 
 export function getAllTemperaments() {
   return function (dispatch) {
-    return axios("http://localhost:3001/temperament")
+    return axios(`${API_URL}/temperament`)
       .then((response) => {
         dispatch({
           type: GET_ALL_TEMPERAMENTS,
@@ -44,7 +46,7 @@ export function getAllTemperaments() {
 
 export function getBreedById(id) {
   return function (dispatch) {
-    return axios("http://localhost:3001/dogs/" + id)
+    return axios(`${API_URL}/dogs/${id}`)
       .then((response) => {
         dispatch({
           type: GET_BREED_BY_ID,
@@ -73,7 +75,7 @@ export const getBreedsByName = () => {
 export const createBreed = (data) => {
   return function (dispatch) {
     return axios
-      .post("http://localhost:3001/dog", data)
+      .post(`${API_URL}/dog`, data)
       .then((response) => {
         if (response.status === 400) {
           throw new Error();
