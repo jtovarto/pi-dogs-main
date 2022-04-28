@@ -6,16 +6,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Release API
+    - uses: actions/checkout@v2    
     - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
       with:
         heroku_api_key: ${{secrets.HEROKU_API_KEY }}
         heroku_app_name: "api-pi-henry-jtovarto"
         heroku_email: ${{secrets.HEROKU_API_KEY }}
       env:
-        HD_APP_BASE: "api"
-    - name: Release Web Client
+        HD_APP_BASE: "api"    
     - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
       with:
         heroku_api_key: ${{secrets.HEROKU_API_KEY }}
