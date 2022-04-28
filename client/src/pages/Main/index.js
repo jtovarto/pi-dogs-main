@@ -9,8 +9,7 @@ import Paginator from "../../components/Paginator";
 
 import {
   getAllBreeds,
-  getAllTemperaments,
-  getBreedsByName,
+  getAllTemperaments,  
 } from "../../redux/actions";
 
 import styles from "./Main.module.css";
@@ -21,8 +20,6 @@ const Main = () => {
   const [temper, setTemper] = useState("all");
   const [count, setCount] = useState([1]);
   const [page, setPage] = useState(1);
-
-  const [breedName, setBreedName] = useState("");
 
   let filterTimeout;
 
@@ -135,6 +132,7 @@ const Main = () => {
   return (
     <>
       <Navbar />
+
       <div className={styles.container}>
         <div className={styles.panel}>
           <div className={styles.filter_panel}>

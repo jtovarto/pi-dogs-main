@@ -5,8 +5,9 @@ export const GET_ALL_TEMPERAMENTS = "GET_ALL_TEMPERAMENTS";
 export const GET_BREED_BY_ID = "GET_BREED_BY_ID";
 export const CLEAR_BREED_BY_ID = "CLEAR_BREED_BY_ID";
 
-export const CREATED_DOG_SUCCESS = "CREATED_DOG_SUCCESS";
-export const CREATED_DOG_FAIL = "CREATED_DOG_FAIL";
+export const NOTIFY = "NOTIFY";
+
+export const CLEAR_NOTIFICATION = "CLEAR_NOTIFICATION";
 
 export function getAllBreeds(name, source) {
   return function (dispatch) {
@@ -58,6 +59,10 @@ export function clearBreedById() {
   return { type: CLEAR_BREED_BY_ID };
 }
 
+export function clearNotification() {
+  return { type: CLEAR_NOTIFICATION };
+}
+
 export const getBreedsByName = () => {
   return (dispatch) => {
     console.log("dispatch");
@@ -67,17 +72,28 @@ export const getBreedsByName = () => {
 
 export const createBreed = (data) => {
   return function (dispatch) {
-    return axios.post("http://localhost:3001/dog", data)
+    return axios
+      .post("http://localhost:3001/dog", data)
       .then((response) => {
+        if (response.status === 400) {
+          throw new Error();
+        }
+
         dispatch({
-          type: CREATED_DOG_SUCCESS,
-          payload: true,
+          type: NOTIFY,
+          payload: {
+            type: "success",
+            message: "Breed has been created",
+          },
         });
       })
       .catch((err) => {
-        dispatch({
-          type: CREATED_DOG_FAIL,
-          payload: false,
+        return dispatch({
+          type: NOTIFY,
+          payload: {
+            type: "fail",
+            message: "There was a problem creating a dog",
+          },
         });
       });
   };
