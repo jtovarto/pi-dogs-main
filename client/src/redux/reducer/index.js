@@ -5,12 +5,16 @@ import {
   CLEAR_BREED_BY_ID,
   NOTIFY,
   CLEAR_NOTIFICATION,
+  TOGGLE_DARK_MODE,
 } from "../actions";
+
+import { THEME_LIGHT } from "../../hooks/useTheme";
 
 const initialState = {
   allBreeds: [],
   allTempers: [],
   notification: [],
+  theme: THEME_LIGHT,
 };
 
 /* const reducers = {
@@ -53,6 +57,12 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         notification: [],
+      };
+    }
+    case TOGGLE_DARK_MODE: {
+      return {
+        ...state,
+        theme: payload,
       };
     }
     default:
