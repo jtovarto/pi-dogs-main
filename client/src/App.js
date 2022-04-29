@@ -7,10 +7,18 @@ import Detail from "./pages/Detail";
 import FormCreate from "./pages/FormCreate";
 import Notification from "./components/Notifications";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 function App() {
-
   const theme = useSelector((state) => state.theme);
+  const lang = useSelector((state) => state.language);
+  const [stateLang, setlang] = useState(lang);
+
+  useEffect(() => {
+    if (lang !== stateLang) {
+      setlang(lang);
+    }
+  }, [lang, stateLang]);
 
   return (
     <div className={theme}>

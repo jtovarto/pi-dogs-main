@@ -10,6 +10,7 @@ export const NOTIFY = "NOTIFY";
 export const CLEAR_NOTIFICATION = "CLEAR_NOTIFICATION";
 
 export const TOGGLE_DARK_MODE = "TOGGLE_DARK_MODE";
+export const TOGGLE_LANGUAGE = "TOGGLE_LANGUAGE";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
 
@@ -104,4 +105,8 @@ export const createBreed = (data) => {
 
 export function changeTheme(payload) {
   return { type: TOGGLE_DARK_MODE, payload };
+}
+
+export function changeLang(payload){
+  return { type: TOGGLE_LANGUAGE, payload };
 }
