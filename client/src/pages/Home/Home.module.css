@@ -1,31 +1,299 @@
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0 4rem;
+  min-height: 100vh;
+  width: 100%;
+  color: var(--color-light);
+  background-color: var(--color-light);
+  background-image: url('../../assets/images/dogs-bg.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 95%;
+  transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  gap: 15rem;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: var(--font-color);
+}
+
+@media(min-width:768px) {
+  .container {
+    gap: 25rem;
+  }
+
+  .title {
+    font-size: 5rem;
+  }
+}
+
+@media(min-width:1024px) {
+  .container {
+    background-size: 65%;    
+    justify-content: space-between;
+    gap: 4rem;
+  }
+
+  .title {
+    font-size: 6rem;    
+  }
+}
+
+.footer {
+  color: var(--font-color);
+}
+
+.config_options {
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 2rem;
+  height: 10vh;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.btn_cont {
+  text-align: center;
+
+}
+
+.btn_cont .btn {
+  position: relative;
+  padding: 20px 70px;
+  border: 1px solid var(--color-dark);
+  color: var(--color-dark);
+  text-decoration: none;
+  font-size: 1.125em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--color-light);
+}
+
+.btn_cont .btn:hover {
+  border: none;
+}
+
+.btn_cont .btn:hover .line_1 {
+  -webkit-animation: move1 1500ms infinite ease;
+  animation: move1 1500ms infinite ease;
+}
+
+.btn_cont .btn:hover .line_2 {
+  -webkit-animation: move2 1500ms infinite ease;
+  animation: move2 1500ms infinite ease;
+}
+
+.btn_cont .btn:hover .line_3 {
+  -webkit-animation: move3 1500ms infinite ease;
+  animation: move3 1500ms infinite ease;
+}
+
+.btn_cont .btn:hover .line_4 {
+  -webkit-animation: move4 1500ms infinite ease;
+  animation: move4 1500ms infinite ease;
+}
+
+.btn_cont .line_1 {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 1px;
+  background-color: var(--color-dark);
+  left: 0;
+  bottom: 0;
+}
+
+.btn_cont .line_2 {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 1px;
+  background-color: var(--color-dark);
+  left: 0;
+  top: 0;
+}
+
+.btn_cont .line_3 {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 1px;
+  background-color: var(--color-dark);
+  right: 0;
+  top: 0;
+}
+
+.btn_cont .line_4 {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 1px;
+  background-color: var(--color-dark);
+  right: 0;
+  bottom: 0;
+}
+
+@-webkit-keyframes move1 {
+  0% {
+    height: 100%;
+    bottom: 0;
+  }
+
+  54% {
+    height: 0;
+    bottom: 100%;
+  }
+
+  55% {
+    height: 0;
+    bottom: 0;
+  }
+
+  100% {
+    height: 100%;
+    bottom: 0;
+  }
+}
+
+@keyframes move1 {
+  0% {
+    height: 100%;
+    bottom: 0;
+  }
+
+  54% {
+    height: 0;
+    bottom: 100%;
+  }
+
+  55% {
+    height: 0;
+    bottom: 0;
+  }
+
+  100% {
+    height: 100%;
+    bottom: 0;
+  }
+}
+
+@-webkit-keyframes move2 {
+  0% {
+    width: 0;
+    left: 0;
+  }
+
+  50% {
     width: 100%;
-    color: white;
-    background-color: black;
+    left: 0;
+  }
+
+  100% {
+    width: 0;
+    left: 100%;
+  }
 }
 
-.container div {
-    text-align: center;
+@keyframes move2 {
+  0% {
+    width: 0;
+    left: 0;
+  }
+
+  50% {
+    width: 100%;
+    left: 0;
+  }
+
+  100% {
+    width: 0;
+    left: 100%;
+  }
 }
 
-.container div h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+@-webkit-keyframes move3 {
+  0% {
+    height: 100%;
+    top: 0;
+  }
+
+  54% {
+    height: 0;
+    top: 100%;
+  }
+
+  55% {
+    height: 0;
+    top: 0;
+  }
+
+  100% {
+    height: 100%;
+    top: 0;
+  }
 }
 
-.container a {
-    color:white;
-    border: 1px solid white;
-    padding: .5rem 1rem;
-    border-radius: 5px;
-    transition: background-color 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+@keyframes move3 {
+  0% {
+    height: 100%;
+    top: 0;
+  }
+
+  54% {
+    height: 0;
+    top: 100%;
+  }
+
+  55% {
+    height: 0;
+    top: 0;
+  }
+
+  100% {
+    height: 100%;
+    top: 0;
+  }
 }
 
-.container a:hover {
-    background-color: white;
-    color: black;
+@-webkit-keyframes move4 {
+  0% {
+    width: 0;
+    right: 0;
+  }
+
+  55% {
+    width: 100%;
+    right: 0;
+  }
+
+  100% {
+    width: 0;
+    right: 100%;
+  }
+}
+
+@keyframes move4 {
+  0% {
+    width: 0;
+    right: 0;
+  }
+
+  55% {
+    width: 100%;
+    right: 0;
+  }
+
+  100% {
+    width: 0;
+    right: 100%;
+  }
 }
