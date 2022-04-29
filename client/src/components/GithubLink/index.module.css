@@ -1,0 +1,36 @@
+.github {
+    position: absolute;
+    display: flex;
+    justify-content: end;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-right: 5rem solid transparent;
+    border-left: 5rem solid var(--color-dark);
+    border-bottom: 5rem solid transparent;
+    border-top: 5rem solid var(--color-dark);
+    transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+
+.github svg {
+    position: absolute;
+    fill: var(--color-light);
+    top: -4rem;
+    left: -4rem;
+    width: 4rem;
+    height: 4rem;
+    transition: all .5s ease-in;
+}
+
+
+.github:hover {
+    opacity: .8;
+    transition: all .5s ease-in;
+    cursor: pointer;
+}
+
+.github:hover svg {
+    transform: scale(95%);
+}
