@@ -28,7 +28,7 @@ export function useTheme() {
     } else {
       setTheme(THEME_DARK);
     }
-  };
+  }; 
 
   return { toogleTheme };
 }
