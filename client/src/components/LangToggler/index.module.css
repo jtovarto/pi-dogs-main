@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: .25rem;
+}
+
+.btn {
+    color: var(--color-dark)
+}
+
+.btn:hover {
+    font-size: 1.25rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all .5 cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}

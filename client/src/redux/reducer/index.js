@@ -6,15 +6,18 @@ import {
   NOTIFY,
   CLEAR_NOTIFICATION,
   TOGGLE_DARK_MODE,
+  TOGGLE_LANGUAGE,
 } from "../actions";
 
 import { THEME_LIGHT } from "../../hooks/useTheme";
+import { ES } from "../../utils/Lang/useLang";
 
 const initialState = {
   allBreeds: [],
   allTempers: [],
   notification: [],
   theme: THEME_LIGHT,
+  lang: ES,
 };
 
 /* const reducers = {
@@ -63,6 +66,12 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         theme: payload,
+      };
+    }
+    case TOGGLE_LANGUAGE: {
+      return {
+        ...state,
+        language: payload,
       };
     }
     default:
