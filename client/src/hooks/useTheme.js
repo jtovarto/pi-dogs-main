@@ -9,7 +9,6 @@ export function useTheme() {
   const [theme, setTheme] = useState(THEME_LIGHT);
 
   useEffect(() => {
-    console.log("entra");
     let storedTheme = localStorage.getItem("theme");
     if (storedTheme === "") {
       storedTheme = theme;
@@ -28,7 +27,7 @@ export function useTheme() {
     } else {
       setTheme(THEME_DARK);
     }
-  }; 
+  };
 
   return { toogleTheme };
 }
