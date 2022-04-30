@@ -6,6 +6,10 @@
     height: 2rem;
     padding: .25rem;
 }
+.btn {
+    background-color: transparent;
+    color: var(--color-light);
+}
 
 .btn.light {
     color: var(--color-dark)
