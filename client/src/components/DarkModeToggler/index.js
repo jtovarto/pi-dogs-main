@@ -5,7 +5,7 @@ const DarkModeToggle = () => {
   return (
     <>
       <input type="checkbox" className={styles.checkbox} id="checkbox" />
-      <label for="checkbox" className={styles.label}  onClick={toogleTheme}>
+      <label htmlFor="checkbox" className={styles.label}  onClick={toogleTheme}>
         <i className={`${styles.fas} ${styles.fa_moon}`}></i>
         <i className={`${styles.fas} ${styles.fa_sun}`}></i>
         <div className={styles.ball}></div>
