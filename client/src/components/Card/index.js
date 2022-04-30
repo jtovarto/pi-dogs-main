@@ -9,11 +9,13 @@ const Card = ({ breed }) => {
         <h2>{breed.name}</h2>
         <div className={styles.info}>
           {breed.temperaments.map((temper) => (
-            <span>{temper}</span>
+            <span key={breed.name + temper}>{temper}</span>
           ))}
         </div>
         <div className={styles.info}>
-            <span>Weight: {breed.weight[0]} - {breed.weight[1]}</span> 
+          <span>
+            Weight: {breed.weight[0]} - {breed.weight[1]}
+          </span>
         </div>
         <div className={styles.icons}>
           <i
