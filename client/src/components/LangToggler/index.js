@@ -6,9 +6,9 @@ const LangToggler = () => {
 
   return (
     <div className={styles.container}>
-      <buttom onClick={toogleLang} className={styles.btn}>
+      <button onClick={toogleLang} className={styles.btn}>
         {lang}
-      </buttom>
+      </button>
     </div>
   );
 };
