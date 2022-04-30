@@ -20,7 +20,7 @@ function useLang() {
     }
 
     if (storedLang !== lang) {
-      localStorage.setItem("lang", lang);
+      localStorage.setItem("lang", lang);      
       dispatch(changeLang(lang));
     }
 
@@ -36,7 +36,12 @@ function useLang() {
   };
 
   const translate = function (key) {
-    const lang = localStorage.getItem("lang");
+    let lang = localStorage.getItem("lang");
+
+    if (!lang) {
+      lang = "es";
+      localStorage.setItem("lang", lang);
+    }
     const langFile = Langs[lang];
     return langFile[key] ?? key;
   };
