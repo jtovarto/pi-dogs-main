@@ -1,19 +1,27 @@
 import { Link } from "react-router-dom";
-import useLang from "../../utils/Lang/useLang";
 import styles from "./Navbar.module.css";
-const Navbar = () => {
-  const [locale, changeLocale, lang] = useLang();
 
-  const changeLang = () => {
-    if (locale === "es") changeLocale("en");
-    if (locale === "en") changeLocale("es");
-  };
+import useLang from "../../utils/Lang/useLang";
+
+import DarkModeToggle from "../../components/DarkModeToggler";
+import LangToggler from "../../components/LangToggler";
+
+const Navbar = () => {
+  const { translate } = useLang();
+
   return (
-    <nav className={styles.nav}>
-      <Link to="/">{lang("Home")}</Link>
-      <div style={{ display:'flex', aligItems:'center', gap:'1rem' }}>
-        <Link to="/create">Create</Link>
-        <a onClick={changeLang}>{locale}</a>
+    <nav className={`${styles.nav} theme-light`}>
+      <div className={styles.nav_link_items}>
+        <Link className={styles.nav_link} to="/">
+          {translate("Home")}
+        </Link>
+        <Link className={styles.nav_link} to="/create">
+          {translate("Create")}
+        </Link>
+      </div>
+      <div className={styles.container}>
+        <DarkModeToggle />
+        <LangToggler  />
       </div>
     </nav>
   );
