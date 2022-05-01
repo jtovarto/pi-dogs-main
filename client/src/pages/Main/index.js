@@ -1,40 +1,33 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Card from "../../components/Card";
+import Input from "../../components/Input";
+import Select from "../../components/Input/Select";
 
 import Navbar from "../../components/Navbar";
 import Paginator from "../../components/Paginator";
 
 /* import useLang from "../../utils/Lang/useLang"; */
 
-import {
-  getAllBreeds,
-  getAllTemperaments,  
-} from "../../redux/actions";
+import { getAllBreeds, getAllTemperaments } from "../../redux/actions";
+import useLang from "../../utils/Lang/useLang";
 
 import styles from "./Main.module.css";
 
 const Main = () => {
   const storeBreeds = useSelector((state) => state.allBreeds);
   const storeTempers = useSelector((state) => state.allTempers);
-  const [temper, setTemper] = useState("all");
+  const [temper, setTemper] = useState("");
   const [count, setCount] = useState([1]);
   const [page, setPage] = useState(1);
 
+  const { translate } = useLang();
+
   let filterTimeout;
 
-  const handleOnChange = (e) => {
-    e.preventDefault();
-    let name = e.target.value;
-    clearTimeout(filterTimeout);
-    if (!name) return dispatch(getAllBreeds());
-
-    filterTimeout = setTimeout(() => {
-      dispatch(getAllBreeds(name));
-    }, 500);
-  };
-
   const [orderBy, setOrderBy] = useState("1_name");
+  const [filterSource, setFilterSource] = useState("");
 
   const dispatch = useDispatch();
 
@@ -84,7 +77,7 @@ const Main = () => {
     let [, property] = orderBy.split("_");
     breeds = breeds.sort(orderByCallbacks[property]);
 
-    if (temper !== "all") {
+    if (temper.length > 2) {
       breeds = breeds.filter((breed) => breed.temperaments.includes(temper));
     }
 
@@ -92,27 +85,8 @@ const Main = () => {
 
     if (count > 0) {
       return breeds.slice(init, init + 8).map((breed) => (
-        <Link to={"/detail/" + breed.id} key={breed.id}>
-          <div className={styles.card}>
-            {breed.name}
-            <div
-              style={{
-                color: "black",
-                fontSize: "0.75rem",
-              }}
-            >
-              {breed.temperaments &&
-                breed.temperaments.map((temper) => (
-                  <p key={breed.id + temper}>{temper}</p>
-                ))}
-
-              <br />
-
-              <p>
-                {breed.weight[0]}-{breed.weight[1]}
-              </p>
-            </div>
-          </div>
+        <Link to={"/detail/" + breed.id} key={`link${breed.id}`}>
+          <Card breed={breed} key={`card${breed.id}`} />
         </Link>
       ));
     }
@@ -120,15 +94,23 @@ const Main = () => {
     return <p>No results</p>;
   };
 
-  /* const [, changeLang, lang] = useLang(); */
-  /* useEffect(()=>{
-    changeLang('es')
-  }) */
-  /* 
-  const onChangeLang = (lang) => {
-    changeLang(lang);
-  }; */
+  const handleFilterByTemper = (e) => {
+    e.preventDefault();
+    const search = e.target.value;
+    if (search.length <= 0) return setTemper("");
+    setTemper(e.target.value);
+  };
 
+  const handleFilterByBreed = (e) => {
+    e.preventDefault();
+    let name = e.target.value;
+    clearTimeout(filterTimeout);
+    if (!name) return dispatch(getAllBreeds());
+
+    filterTimeout = setTimeout(() => {
+      dispatch(getAllBreeds(name));
+    }, 500);
+  };
   return (
     <>
       <Navbar />
@@ -136,53 +118,53 @@ const Main = () => {
       <div className={styles.container}>
         <div className={styles.panel}>
           <div className={styles.filter_panel}>
-            <label htmlFor="temperamentFilter">
-              Filter by Temper:
-              <select
-                id="temperamentFilter"
-                onChange={(e) => setTemper(e.target.value)}
-              >
-                <option value="all">All temperaments</option>
-                {storeTempers &&
-                  storeTempers.map((temper) => (
-                    <option key={temper.name}>{temper.name}</option>
-                  ))}
-              </select>
-            </label>
+            <Select
+              label={translate("Filter by resource  ")}
+              onChange={(e) => setFilterSource(e.target.value)}
+            >
+              <option value="">{translate("All results")}</option>
+              <option value="db">{translate("Only database")}</option>
+              <option value="api">{translate("Only Api")}</option>
+            </Select>
+            
+            <Input
+              label={translate("Filter by temper")}
+              list="tempers"
+              onChange={handleFilterByTemper}
+            />
+            <datalist id="tempers">
+              {storeTempers &&
+                storeTempers.map((temper) => (
+                  <option key={temper.name}>{temper.name}</option>
+                ))}
+            </datalist>
 
-            <label htmlFor="breedFilter">
-              Filter by Breed:
-              <input
-                onChange={handleOnChange}
-                style={{ border: "1px solid black", padding: "1rem" }}
-              />
-            </label>
-          </div>
+            <Input
+              label={translate("Filter by breed")}
+              list="tempers"
+              onChange={handleFilterByBreed}
+            />
 
-          <div>
-            <label htmlFor="">
-              Order by:
-              <select
-                name=""
-                id=""
-                onChange={(e) => setOrderBy(e.target.value)}
-              >
-                <option value="1_name">Name ASC</option>
-                <option value="-1_name">Name DESC</option>
-                <option value="1_weight">Weight ASC</option>
-                <option value="-1_weight">Weight DESC</option>
-              </select>
-            </label>
+            <Select
+              label={translate("Order by")}
+              onChange={(e) => setOrderBy(e.target.value)}
+            >
+              <option value="1_name">Name ASC</option>
+              <option value="-1_name">Name DESC</option>
+              <option value="1_weight">Weight ASC</option>
+              <option value="-1_weight">Weight DESC</option>
+            </Select>
           </div>
         </div>
 
         <br></br>
         <p>Results ({count})</p>
         <br></br>
+
         <div className={styles.content}>{storeBreeds && print()}</div>
       </div>
 
-      <Paginator count={count} setPage={setPage} />
+      <Paginator currentPage={page} count={count} setPage={setPage} />
     </>
   );
 };
