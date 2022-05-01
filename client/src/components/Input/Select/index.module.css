@@ -1,0 +1,6 @@
+.select {
+    width: 100%;
+    background-color: transparent;
+    border-bottom: 1px solid var(--color-dark);
+    padding: .5rem;    
+}
