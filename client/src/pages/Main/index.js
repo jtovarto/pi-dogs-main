@@ -4,11 +4,10 @@ import { Link } from "react-router-dom";
 import Card from "../../components/Card";
 import Input from "../../components/Input";
 import Select from "../../components/Input/Select";
+import LoadSpinner from "../../components/LoadSpinner";
 
 import Navbar from "../../components/Navbar";
 import Paginator from "../../components/Paginator";
-
-/* import useLang from "../../utils/Lang/useLang"; */
 
 import { getAllBreeds, getAllTemperaments } from "../../redux/actions";
 import useLang from "../../utils/Lang/useLang";
@@ -16,29 +15,39 @@ import useLang from "../../utils/Lang/useLang";
 import styles from "./Main.module.css";
 
 const Main = () => {
-  const storeBreeds = useSelector((state) => state.allBreeds);
-  const storeTempers = useSelector((state) => state.allTempers);
-  const [temper, setTemper] = useState("");
-  const [count, setCount] = useState([1]);
-  const [page, setPage] = useState(1);
-
+  const dispatch = useDispatch();
   const { translate } = useLang();
 
-  let filterTimeout;
-
-  const [orderBy, setOrderBy] = useState("1_name");
-  const [filterSource, setFilterSource] = useState("");
-
-  const dispatch = useDispatch();
+  const storeBreeds = useSelector((state) => state.allBreeds);
+  const storeTempers = useSelector((state) => state.allTempers);
 
   useEffect(() => {
-    if (storeBreeds.length <= 0) {
-      dispatch(getAllBreeds());
+    dispatch(getAllBreeds());
+    dispatch(getAllTemperaments());
+  }, [dispatch]);
+
+  //Filter
+  const [breedFilter, setBreed] = useState("");
+  const [temperFilter, setTemper] = useState("");
+  const [sourceFilter, setSource] = useState("all");
+
+  const filterByBreed = (array, breed) => {};
+
+  const filterByTemper = (array, temper) => {
+    if (temper.length > 3) {
+      return array.filter((item) => item.temperaments.includes(temper));
     }
-    if (storeTempers.length <= 0) {
-      dispatch(getAllTemperaments());
-    }
-  }, [storeBreeds, storeTempers, dispatch]);
+    return array;
+  };
+  const filterBySource = (array, source) => {
+    if (source === "db") return array.filter((item) => isNaN(item.id));
+    if (source === "api") return array.filter((item) => !isNaN(item.id));
+    return array;
+  };
+
+  //Sort
+  const [orderBy, setOrderBy] = useState("");
+  let filterTimeout;
 
   let orderByCallbacks = {
     name: (a, b) => {
@@ -70,20 +79,25 @@ const Main = () => {
     },
   };
 
+  //Pagination
+  const [count, setCount] = useState([1]);
+  const [page, setPage] = useState(1);
+
   const print = () => {
     const init = (page - 1) * 8;
+    let breeds = [...storeBreeds];
 
-    let breeds = storeBreeds;
+    breeds = filterByTemper(breeds, temperFilter);
+    breeds = filterBySource(breeds, sourceFilter);
+
     let [, property] = orderBy.split("_");
-    breeds = breeds.sort(orderByCallbacks[property]);
-
-    if (temper.length > 2) {
-      breeds = breeds.filter((breed) => breed.temperaments.includes(temper));
+    if (property?.length > 0) {
+      breeds = breeds.sort(orderByCallbacks[property]);
     }
 
     if (count !== breeds.length) setCount(breeds.length);
 
-    if (count > 0) {
+    if (breeds.length > 0) {
       return breeds.slice(init, init + 8).map((breed) => (
         <Link to={"/detail/" + breed.id} key={`link${breed.id}`}>
           <Card breed={breed} key={`card${breed.id}`} />
@@ -91,7 +105,7 @@ const Main = () => {
       ));
     }
 
-    return <p>No results</p>;
+    return <p className={styles.title}>No results</p>;
   };
 
   const handleFilterByTemper = (e) => {
@@ -119,18 +133,17 @@ const Main = () => {
         <div className={styles.panel}>
           <div className={styles.filter_panel}>
             <Select
-              label={translate("Filter by resource  ")}
-              onChange={(e) => setFilterSource(e.target.value)}
+              label={translate("Filter by resource")}
+              onChange={(e) => setSource(e.target.value)}
             >
-              <option value="">{translate("All results")}</option>
-              <option value="db">{translate("Only database")}</option>
-              <option value="api">{translate("Only Api")}</option>
+              <option value="db">{translate("Only from database")}</option>
+              <option value="api">{translate("Only from API")}</option>
             </Select>
-            
+
             <Input
               label={translate("Filter by temper")}
               list="tempers"
-              onChange={handleFilterByTemper}
+              onChange={(e) => setTemper(e.target.value)}
             />
             <datalist id="tempers">
               {storeTempers &&
@@ -140,31 +153,34 @@ const Main = () => {
             </datalist>
 
             <Input
-              label={translate("Filter by breed")}
-              list="tempers"
+              label={translate("Filter by breed")}              
               onChange={handleFilterByBreed}
             />
+          </div>
+        </div>
 
+        <div className={styles.result_header}>
+          <p>
+            Results <span>({count})</span>
+          </p>
+          <div className={styles.sorter}>
             <Select
               label={translate("Order by")}
               onChange={(e) => setOrderBy(e.target.value)}
             >
-              <option value="1_name">Name ASC</option>
-              <option value="-1_name">Name DESC</option>
-              <option value="1_weight">Weight ASC</option>
-              <option value="-1_weight">Weight DESC</option>
+              <option value="1_name">{translate('Name')} a-z</option>
+              <option value="-1_name">Name z-a</option>
+              <option value="1_weight">Weight 0-9</option>
+              <option value="-1_weight">Weight 9-0</option>
             </Select>
           </div>
         </div>
 
-        <br></br>
-        <p>Results ({count})</p>
-        <br></br>
+        <div className={styles.content}>{print()}</div>
+        {/* {<LoadSpinner />} */}
 
-        <div className={styles.content}>{storeBreeds && print()}</div>
+        <Paginator currentPage={page} count={count} setPage={setPage} />
       </div>
-
-      <Paginator currentPage={page} count={count} setPage={setPage} />
     </>
   );
 };
