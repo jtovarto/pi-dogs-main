@@ -1,9 +1,5 @@
-html,
-body {
-    height: 100%;
-}
 
-body {
+.container {
     display: flex;
     align-items: center;
     justify-content: center;
