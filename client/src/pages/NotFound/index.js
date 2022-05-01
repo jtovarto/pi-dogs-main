@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import styles from "./index.module.css";
+import styles from "./NotFound.module.css";
 import useLang from "../../utils/Lang/useLang";
 import ButtonLink from "../../components/ButtonLink";
 
@@ -9,9 +9,7 @@ const NotFound = () => {
     <div className={styles.container}>
         <p className={styles.message}>Page not found</p>
       <h1 className={styles.m404}>404</h1>
-      
-
-      
+            
       <div className={styles.btn}>
         <Link to="/">
           <ButtonLink label={translate("Back to home")} />
