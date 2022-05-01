@@ -8,15 +8,7 @@
 }
 .btn {
     background-color: transparent;
-    color: var(--color-light);
-}
-
-.btn.light {
-    color: var(--color-dark)
-}
-
-.btn.dark {
-    color: var(--color-light)
+    color: var(--color-dark);
 }
 
 .btn:hover {

@@ -8,17 +8,17 @@
 .nav {
     padding: 0.5rem 1rem;
     height: 10vh;
-    background-color: var(--color-dark);
+    background-color: var(--color-light);
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    color: white;    
+    justify-content: space-between;    
 }
 
 .nav_link {
     font-size: 1.25rem;
-    color: var(--color-light);
+    color: var(--color-dark);
+    font-weight: 600;
 }
 
 .nav_link:hover {

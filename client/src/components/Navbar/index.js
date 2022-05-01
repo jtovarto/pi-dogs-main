@@ -10,7 +10,7 @@ const Navbar = () => {
   const { translate } = useLang();
 
   return (
-    <nav className={`${styles.nav} theme-light`}>
+    <nav className={`${styles.nav} theme-dark`}>
       <div className={styles.nav_link_items}>
         <Link className={styles.nav_link} to="/">
           {translate("Home")}
