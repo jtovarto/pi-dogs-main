@@ -1,6 +1,7 @@
 import {
   GET_ALL_BREEDS,
   GET_ALL_TEMPERAMENTS,
+  GET_BREED_BY_NAME,
   GET_BREED_BY_ID,
   CLEAR_BREED_BY_ID,
   NOTIFY,
@@ -36,6 +37,12 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         allTempers: payload,
+      };
+    }
+    case GET_BREED_BY_NAME: {
+      return {
+        ...state,
+        allBreeds: payload,
       };
     }
     case GET_BREED_BY_ID: {

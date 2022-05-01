@@ -9,7 +9,11 @@ import LoadSpinner from "../../components/LoadSpinner";
 import Navbar from "../../components/Navbar";
 import Paginator from "../../components/Paginator";
 
-import { getAllBreeds, getAllTemperaments } from "../../redux/actions";
+import {
+  getAllBreeds,
+  getAllTemperaments,
+  getBreedsByName,
+} from "../../redux/actions";
 import useLang from "../../utils/Lang/useLang";
 
 import styles from "./Main.module.css";
@@ -29,9 +33,24 @@ const Main = () => {
   //Filter
   const [breedFilter, setBreed] = useState("");
   const [temperFilter, setTemper] = useState("");
-  const [sourceFilter, setSource] = useState("all");
+  const [sourceFilter, setSource] = useState("");
 
-  const filterByBreed = (array, breed) => {};
+  const filterByBreed = (e) => {
+    e.preventDefault();
+
+    clearTimeout(filterTimeout);
+
+    let name = e.target.value;
+    if (!name || name.length < 1) {
+      return dispatch(getAllBreeds());
+    }
+
+    setBreed(name);
+
+    filterTimeout = setTimeout(() => {
+      dispatch(getBreedsByName(name));
+    }, 500);
+  };
 
   const filterByTemper = (array, temper) => {
     if (temper.length > 3) {
@@ -39,6 +58,7 @@ const Main = () => {
     }
     return array;
   };
+
   const filterBySource = (array, source) => {
     if (source === "db") return array.filter((item) => isNaN(item.id));
     if (source === "api") return array.filter((item) => !isNaN(item.id));
@@ -83,6 +103,18 @@ const Main = () => {
   const [count, setCount] = useState([1]);
   const [page, setPage] = useState(1);
 
+  //clear filter and sorter
+  const clearFilters = (e) => {
+    e.preventDefault();
+    setBreed("");
+    setTemper("");
+    setSource("");
+    setOrderBy("");
+    if (storeBreeds.length < 172) {
+      dispatch(getAllBreeds());
+    }
+  };
+
   const print = () => {
     const init = (page - 1) * 8;
     let breeds = [...storeBreeds];
@@ -108,23 +140,6 @@ const Main = () => {
     return <p className={styles.title}>No results</p>;
   };
 
-  const handleFilterByTemper = (e) => {
-    e.preventDefault();
-    const search = e.target.value;
-    if (search.length <= 0) return setTemper("");
-    setTemper(e.target.value);
-  };
-
-  const handleFilterByBreed = (e) => {
-    e.preventDefault();
-    let name = e.target.value;
-    clearTimeout(filterTimeout);
-    if (!name) return dispatch(getAllBreeds());
-
-    filterTimeout = setTimeout(() => {
-      dispatch(getAllBreeds(name));
-    }, 500);
-  };
   return (
     <>
       <Navbar />
@@ -135,6 +150,7 @@ const Main = () => {
             <Select
               label={translate("Filter by resource")}
               onChange={(e) => setSource(e.target.value)}
+              value={sourceFilter}
             >
               <option value="db">{translate("Only from database")}</option>
               <option value="api">{translate("Only from API")}</option>
@@ -144,6 +160,7 @@ const Main = () => {
               label={translate("Filter by temper")}
               list="tempers"
               onChange={(e) => setTemper(e.target.value)}
+              value={temperFilter}
             />
             <datalist id="tempers">
               {storeTempers &&
@@ -153,8 +170,9 @@ const Main = () => {
             </datalist>
 
             <Input
-              label={translate("Filter by breed")}              
-              onChange={handleFilterByBreed}
+              label={translate("Filter by name")}
+              onChange={filterByBreed}
+              value={breedFilter}
             />
           </div>
         </div>
@@ -163,12 +181,18 @@ const Main = () => {
           <p>
             Results <span>({count})</span>
           </p>
+          <div>
+            <button type="button" onClick={clearFilters}>
+              {translate("Clear all")}
+            </button>
+          </div>
           <div className={styles.sorter}>
             <Select
               label={translate("Order by")}
               onChange={(e) => setOrderBy(e.target.value)}
+              value={orderBy}
             >
-              <option value="1_name">{translate('Name')} a-z</option>
+              <option value="1_name">{translate("Name")} a-z</option>
               <option value="-1_name">Name z-a</option>
               <option value="1_weight">Weight 0-9</option>
               <option value="-1_weight">Weight 9-0</option>

@@ -5,7 +5,7 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;  
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .theme-light {
@@ -17,7 +17,11 @@ body {
   --color-light: #F8FAFC;
   --color-dark: #0F172A;
 
+  --color-disabled: rgb(143, 142, 142);
+
   --color-shadow: rgba(15, 23, 42, .5);
+
+  --bg-select: transparent;
 }
 
 .theme-dark {
@@ -29,8 +33,11 @@ body {
   --color-light: #0F172A;
   --color-dark: #F8FAFC;
 
+  --color-disabled: rgb(143, 142, 142);
+
   --color-shadow: rgba(15, 23, 42, .5);
 
+  --bg-select: #0F172A;
 }
 
 .theme-dark {
