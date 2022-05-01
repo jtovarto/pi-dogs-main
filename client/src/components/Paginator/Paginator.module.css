@@ -53,6 +53,9 @@
     color: var(--color-light);
 }
 
+.btn_page_num.active {
+    background-color: white;
+}
 
 .icon {
     width: 2rem;
