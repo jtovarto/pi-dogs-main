@@ -8,7 +8,9 @@
 }
 .btn {
     background-color: transparent;
+
     color: var(--color-dark);
+
 }
 
 .btn:hover {

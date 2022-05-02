@@ -113,6 +113,7 @@ export function changeTheme(payload) {
   return { type: TOGGLE_DARK_MODE, payload };
 }
 
+
 export function changeLang(payload) {
   return { type: TOGGLE_LANGUAGE, payload };
 }
@@ -120,3 +121,4 @@ export function changeLang(payload) {
 export function activateLoading() {
   return { type: TOGGLE_IS_LOADING };
 }
+

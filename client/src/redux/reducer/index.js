@@ -8,7 +8,9 @@ import {
   CLEAR_NOTIFICATION,
   TOGGLE_DARK_MODE,
   TOGGLE_LANGUAGE,
+
   TOGGLE_IS_LOADING,
+
 } from "../actions";
 
 import { THEME_LIGHT } from "../../hooks/useTheme";
@@ -20,7 +22,9 @@ const initialState = {
   notification: [],
   theme: THEME_LIGHT,
   lang: ES,
+
   isLoading: true,
+
 };
 
 /* const reducers = {
@@ -86,6 +90,7 @@ const reducer = (state = initialState, { type, payload }) => {
         language: payload,
       };
     }
+
     case TOGGLE_IS_LOADING: {
       return {
         ...state,

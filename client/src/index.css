@@ -1,3 +1,29 @@
+.theme-light {
+  --color-primary: #051139;
+  --color-secondary: #4e51ab;
+  --color-accent: #e9791a;
+  --font-color: #0F172A;
+
+  --color-light: #F8FAFC;
+  --color-dark: #0F172A;
+
+  --color-shadow: rgba(15, 23, 42, .5);
+}
+
+.theme-dark {
+  --color-primary: #17ed90;
+  --color-secondary: #243133;
+  --color-accent: #12cdea;
+  --font-color: #F8FAFC;
+
+  --color-light: #0F172A;
+  --color-dark: #F8FAFC;
+
+  --color-shadow: rgba(15, 23, 42, .5);
+
+}
+
+
 body {
   overflow-x: hidden;
   margin: 0;
@@ -6,6 +32,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.theme-dark {
+  filter: brightness(.8) contrast(1.2);
+
 }
 
 .theme-light {

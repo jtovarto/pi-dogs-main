@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import NotFound from "./pages/NotFound";
 
+
 function App() {
   const theme = useSelector((state) => state.theme);
   const lang = useSelector((state) => state.language);
