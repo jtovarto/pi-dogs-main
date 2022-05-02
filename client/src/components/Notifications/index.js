@@ -11,18 +11,18 @@ const Notification = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (notification.length !== count) {
-      setShow(notification.length > 0);
-      setCount(notification.length);
+    if (notification?.length !== count) {
+      setShow(notification?.length > 0);
+      setCount(notification?.length);
     }
 
-    if (notification.length > 0) {
+    if (notification?.length > 0) {
       setTimeout(function () {
         setShow(false);
         dispatch(clearNotification());
       }, 5000);
     }
-  }, [notification]);
+  }, [notification, count, dispatch]);
 
   return (
     <>

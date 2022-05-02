@@ -44,25 +44,7 @@ describe("Dogs routes", () => {
         expect(dbStub.calledOnce).to.be.true;
         expect(apiStub.calledOnce).to.be.true;
         expect(res.body).to.be.an("array").that.have.lengthOf(2);
-      });
-
-      it("should return only those from the database when prompted", async () => {
-        const res = await request(app).get("/dogs").query({ source: "db" });
-
-        expect(dbStub.calledOnce).to.be.true;
-        expect(apiStub.calledOnce).to.be.false;
-        expect(res.body).to.have.lengthOf(1);
-        expect(res.body[0].name).to.be.equal(dbDog.name);
-      });
-
-      it("should return only those from the api when prompted", async () => {
-        const res = await request(app).get("/dogs").query({ source: "api" });
-
-        expect(dbStub.calledOnce).to.be.false;
-        expect(apiStub.calledOnce).to.be.true;
-        expect(res.body).to.have.lengthOf(1);
-        expect(res.body[0].name).to.be.equal(apiDog.name);
-      });
+      });      
 
       it("should return only necessary attributes", async () => {
         const res = await request(app).get("/dogs");
@@ -88,21 +70,7 @@ describe("Dogs routes", () => {
 
         expect(dbStub.calledWith("name")).to.be.true;
         expect(apiStub.calledWith("name")).to.be.true;
-      });
-
-      it("should send filtered results by name only from the db", async () => {
-        await request(app).get("/dogs").query({ name: "name", source: "db" });
-
-        expect(dbStub.calledWith("name")).to.be.true;
-        expect(apiStub.calledOnce).to.be.false;
-      });
-
-      it("should send filtered results by name only from the db", async () => {
-        await request(app).get("/dogs").query({ name: "name", source: "api" });
-
-        expect(dbStub.calledOnce).to.be.false;
-        expect(apiStub.calledWith("name")).to.be.true;
-      });
+      });     
 
       it("should return a empty array when breed name is not found", async () => {
         const res = await request(app)

@@ -41,9 +41,44 @@ body {
 
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.theme-light {
+  --color-primary: #051139;
+  --color-secondary: #4e51ab;
+  --color-accent: #e9791a;
+  --font-color: #0F172A;
+
+  --color-light: #F8FAFC;
+  --color-dark: #0F172A;
+
+  --color-disabled: rgb(143, 142, 142);
+
+  --color-shadow: rgba(15, 23, 42, .5);
+
+  --bg-select: transparent;
+  --color-error: red;
+}
+
+.theme-dark {
+  --color-primary: #17ed90;
+  --color-secondary: #243133;
+  --color-accent: #12cdea;
+  --font-color: #F8FAFC;
+
+  --color-light: #0F172A;
+  --color-dark: #F8FAFC;
+
+  --color-disabled: rgb(143, 142, 142);
+
+  --color-shadow: rgba(15, 23, 42, .5);
+
+  --bg-select: #0F172A;
+
+  --color-error: red;
+}
+
+.theme-dark {
+  filter: brightness(.8) contrast(1.2);
+
 }
 
 #toast {

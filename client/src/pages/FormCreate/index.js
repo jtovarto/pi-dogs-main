@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import Navbar from "../../components/Navbar";
 import styles from "./FormCreate.module.css";
 
+import Navbar from "../../components/Navbar";
+import useLang from "../../utils/Lang/useLang";
 import { validate } from "../../hooks/useValidator";
 
 import { getAllTemperaments, createBreed } from "../../redux/actions";
+import FormControl from "./inputs/FormControl";
+import FormControlGroup from "./inputs/FormControlGroup";
+import FormSelect from "./inputs/FormSelect";
 
 const FormCreate = () => {
   const storeTempers = useSelector((state) => state.allTempers);
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
 
-  const navigate = useNavigate();
+  const { translate } = useLang();
 
   useEffect(() => {
     if (storeTempers.length <= 0) {
@@ -23,17 +27,30 @@ const FormCreate = () => {
   }, [storeTempers, dispatch]);
 
   const inputDefault = {
-    name: "AAA",
-    weight_min: 1,
-    weight_max: 2,
-    height_min: 1,
-    height_max: 2,
-    lifespan_min: 1,
-    lifespan_max: 2,
-    image: "https://aaa.com?aaa.jpg",
+    name: "",
+    min_weight: 0,
+    max_weight: 0,
+    min_height: 0,
+    max_height: 0,
+    min_lifespan: 0,
+    max_lifespan: 0,
+    image: "",
     temperaments: [],
   };
   const [input, setInput] = useState(inputDefault);
+
+  const {
+    name,
+    min_weight,
+    max_weight,
+    min_height,
+    max_height,
+    min_lifespan,
+    max_lifespan,
+    image,
+    temperaments,
+  } = input;
+
   const handleOnChange = (e) => {
     e.preventDefault();
     setInput({
@@ -42,46 +59,41 @@ const FormCreate = () => {
     });
   };
 
-  const {
-    name,
-    weight_min,
-    weight_max,
-    height_min,
-    height_max,
-    lifespan_min,
-    lifespan_max,
-    image,
-    temperaments,
-  } = input;
-
-  const addTemper = (e) => {
+  const handlerSelect = (e) => {
     e.preventDefault();
+    if (!temperaments.includes(e.target.value)) {
+      setInput({
+        ...input,
+        temperaments: [...input.temperaments, e.target.value],
+      });
+    }
+  };
+
+  const removeTemper = (id) => {
+    const newTemper = temperaments.filter((temper) => +temper !== +id);
     setInput({
       ...input,
-      temperaments: [...input.temperaments, e.target.value],
+      temperaments: [...newTemper],
     });
   };
-  /* const urlValidation = (URL) => {
-    const regex = new RegExp(/(https?:\/\/.*\.(?:png|jpg|gif))/);
-    return regex.test(URL);
-  }; */
+
   const handleOnSubmit = (e) => {
     e.preventDefault();
 
     const validated = validate(
       input,
       {
-        name: "isRequired|isString",
-        weight_min: "isRequired|isNumber|isBetween:1,20|isLessThan:weight_max",
-        weight_max:
-          "isRequired|isNumber|isBetween:1,20|isGreaterThan:weight_min",
-        height_min: "isRequired|isNumber|isBetween:1,20|isLessThan:height_max",
-        height_max:
-          "isRequired|isNumber|isBetween:1,20|isGreaterThan:height_min",
-        lifespan_min:
-          "isRequired|isNumber|isBetween:1,20|isLessThan:lifespan_max",
-        lifespan_max:
-          "isRequired|isNumber|isBetween:1,20|isGreaterThan:lifespan_min",
+        name: "isRequired|isString|isGreaterThan:3",
+        min_weight: "isRequired|isNumber|isBetween:1,80|isLessThan:max_weight",
+        max_weight:
+          "isRequired|isNumber|isBetween:1,85|isGreaterThan:min_weight",
+        min_height: "isRequired|isNumber|isBetween:1,65|isLessThan:max_height",
+        max_height:
+          "isRequired|isNumber|isBetween:1,75|isGreaterThan:min_height",
+        min_lifespan:
+          "isRequired|isNumber|isBetween:1,15|isLessThan:max_lifespan",
+        max_lifespan:
+          "isRequired|isNumber|isBetween:1,20|isGreaterThan:min_lifespan",
         temperaments: "isArray",
         image: "isRequired|isImage",
       },
@@ -94,167 +106,86 @@ const FormCreate = () => {
 
     let data = {
       name: input.name,
-      weight: [input.weight_min, input.weight_max],
-      height: [input.height_min, input.height_max],
-      lifespan: [input.lifespan_min, input.lifespan_max],
+      weight: [input.min_weight, input.max_weight],
+      height: [input.min_height, input.max_height],
+      lifespan: [input.min_lifespan, input.max_lifespan],
       temperaments: input.temperaments,
       image: input.image,
     };
 
     dispatch(createBreed(data));
+
+    setInput(inputDefault);
   };
   return (
     <div>
       <Navbar />
-      <div style={{ display: "flex", gap: ".5rem", padding: "2rem" }}>
-        <span>Home</span>
-        <span>&gt;</span>
-        <Link to="/main">Volver</Link>
+
+      <div className={styles.container}>
+        <form onSubmit={handleOnSubmit} className={styles.form}>
+          <h1>{translate("Create a new breed")}</h1>
+          <FormControl
+            name="name"
+            value={name}
+            label="Name"
+            onChange={handleOnChange}
+            errors={errors}
+          />
+
+          <FormControlGroup
+            onChange={handleOnChange}
+            min_label="Min. height"
+            min_name="min_height"
+            min_value={min_height}
+            max_label="Max. height"
+            max_name="max_height"
+            max_value={max_height}
+            errors={errors}
+          />
+
+          <FormControlGroup
+            onChange={handleOnChange}
+            min_label="Min. weight"
+            min_name="min_weight"
+            min_value={min_weight}
+            max_label="Max. weight"
+            max_name="max_weight"
+            max_value={max_weight}
+            errors={errors}
+          />
+
+          <FormControlGroup
+            onChange={handleOnChange}
+            min_label="Min. life expectancy"
+            min_name="min_lifespan"
+            min_value={min_lifespan}
+            max_label="Max. life expectancy"
+            max_name="max_lifespan"
+            max_value={max_lifespan}
+            errors={errors}
+          />
+
+          <FormControl
+            name="image"
+            value={image}
+            label="URL Image"
+            onChange={handleOnChange}
+            errors={errors}
+          />
+          <br />
+          <br />
+          <FormSelect
+            values={temperaments}
+            handlerSelect={handlerSelect}
+            removeTemper={removeTemper}
+            errors={errors}
+          />
+
+          <div className={styles.btn_wrapper}>
+            <button type="submit">{translate("Create")}</button>
+          </div>
+        </form>
       </div>
-
-      <br />
-      <br />
-
-      <form onSubmit={handleOnSubmit} className={styles.form}>
-        <div className={styles.input_wrapper}>
-          <label htmlFor="">Name</label>
-          <div>
-            <input
-              className={styles.input}
-              id="name"
-              onChange={handleOnChange}
-              name="name"
-              value={name}
-            />
-            {errors?.hasOwnProperty("name") &&
-              errors["name"].map((error) => <p>{error}</p>)}
-          </div>
-        </div>
-
-        <div className={styles.input_wrapper}>
-          <label htmlFor="height">Height</label>
-          <div>
-            <input
-              className={styles.input}
-              id="height"
-              onChange={handleOnChange}
-              name="height_min"
-              type="number"
-              value={height_min}
-            />
-            {errors?.hasOwnProperty("height_min") &&
-              errors["height_min"].map((error) => <p>{error}</p>)}
-          </div>
-
-          <div>
-            <input
-              className={styles.input}
-              id="height"
-              onChange={handleOnChange}
-              name="height_max"
-              type="number"
-              value={height_max}
-            />
-            {errors?.hasOwnProperty("height_max") &&
-              errors["height_max"].map((error) => <p>{error}</p>)}
-          </div>
-        </div>
-
-        <div className={styles.input_wrapper}>
-          <label htmlFor="weight">Weight</label>
-          <div>
-            <input
-              className={styles.input}
-              id="weight"
-              onChange={handleOnChange}
-              name="weight_min"
-              type="number"
-              value={weight_min}
-            />
-            {errors?.hasOwnProperty("weight_min") &&
-              errors["weight_min"].map((error) => <p>{error}</p>)}
-          </div>
-
-          <div>
-            <input
-              className={styles.input}
-              id="weight"
-              onChange={handleOnChange}
-              name="weight_max"
-              type="number"
-              value={weight_max}
-            />
-            {errors?.hasOwnProperty("weight_max") &&
-              errors["weight_max"].map((error) => <p>{error}</p>)}
-          </div>
-        </div>
-
-        <div className={styles.input_wrapper}>
-          <label htmlFor="lifespan">Life span</label>
-          <div>
-            <input
-              className={styles.input}
-              id="lifespan_min"
-              onChange={handleOnChange}
-              name="lifespan_min"
-              type="number"
-              value={lifespan_min}
-            />
-            {errors?.hasOwnProperty("lifespan_min") &&
-              errors["lifespan_min"].map((error) => <p>{error}</p>)}
-          </div>
-          <div>
-            <input
-              className={styles.input}
-              id="lifespan_max"
-              onChange={handleOnChange}
-              name="lifespan_max"
-              type="number"
-              value={lifespan_max}
-            />
-            {errors?.hasOwnProperty("lifespan_max") &&
-              errors["lifespan_max"].map((error) => <p>{error}</p>)}
-          </div>
-        </div>
-
-        <div className={styles.input_wrapper}>
-          <div>
-            <label htmlFor="image">Image</label>
-            <input
-              className={styles.input}
-              type="url"
-              id="image"
-              onChange={handleOnChange}
-              name="image"
-              value={image}
-            />
-            {errors?.hasOwnProperty("image") &&
-              errors["image"].map((error) => <p>{error}</p>)}
-          </div>
-        </div>
-
-        <div className={styles.input_wrapper}>
-          <label htmlFor="temperaments">Temperaments</label>
-          <select
-            multiple
-            className={styles.input}
-            name={temperaments}
-            id="temperaments"
-            onChange={addTemper}
-          >
-            {storeTempers &&
-              storeTempers.map((temper) => (
-                <option key={temper.name} value={temper.id}>
-                  {temper.name}
-                </option>
-              ))}
-          </select>
-          {errors?.hasOwnProperty("temperaments") &&
-            errors["temperaments"].map((error) => <p>{error}</p>)}
-        </div>
-
-        <button type="submit">Enviar</button>
-      </form>
     </div>
   );
 };

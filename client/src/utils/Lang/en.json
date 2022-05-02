@@ -1,7 +1,30 @@
 {
-    "Welcome": "Welcome",
-    "Enter": "Enter",
-    "First": "First",
-    "Prev": "Prev",
-    "Home": "Home"
+
+    "Welcome":"Welcome",
+    "Enter":"Enter",
+    "First":"First",
+    "Prev":"Prev",
+    "Home":"Home",
+    "Filter by temper": "Filter by temper",
+    "Create a new breed": "Create a new breed",
+    "Name": "Name",
+    "Min. height": "Min. height",
+    "Max. height": "Max. height",
+    "Min. weight": "Min. weight",
+    "Max. weight": "Max. weight",
+    "Min. life expectancy": "Min. life expectancy",
+    "Max. life expectancy": "Max. life expectancy",
+    "URL Image": "URL Image",
+    "Temperaments": "Temperaments",
+    "Added temperaments": "Added Temperaments",
+    "Create": "Create",
+    "Filter by source":"Filter by source",
+    "Filter by name":"Filter by name",
+    "Results":"Results",
+    "Clear all":"Clear all",
+    "Order by":"Order by",
+    "No results":"No Results",
+    "Weight": "Weight",
+    "Main": "Main"
+
 }

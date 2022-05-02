@@ -4,20 +4,12 @@ const apiRepository = require("../repositories/apiBreed");
 const { Dog, Temperament } = require("../../src/db.js");
 
 const getAll = async (req, res) => {
-  const { source, name } = req.query;
-  let response = [];
+  const { name } = req.query;
+
   try {
-    if (source !== "api") {
-      let dbBreeds = await dbRepository.getAll(name);
-      response = [...dbBreeds];
-    }
-
-    if (source !== "db") {
-      let apiBreeds = await apiRepository.getAll(name);
-      response = [...response, ...apiBreeds];
-    }
-
-    res.json(response);
+    let dbBreeds = await dbRepository.getAll(name);
+    let apiBreeds = await apiRepository.getAll(name);
+    res.json([...dbBreeds, ...apiBreeds]);
   } catch (error) {
     res.json({
       success: false,
