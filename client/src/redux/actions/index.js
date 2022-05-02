@@ -6,6 +6,8 @@ export const GET_BREED_BY_NAME = "GET_BREED_BY_NAME";
 export const GET_BREED_BY_ID = "GET_BREED_BY_ID";
 export const CLEAR_BREED_BY_ID = "CLEAR_BREED_BY_ID";
 
+export const TOGGLE_IS_LOADING = "TOGGLE_IS_LOADING";
+
 export const NOTIFY = "NOTIFY";
 
 export const CLEAR_NOTIFICATION = "CLEAR_NOTIFICATION";
@@ -17,6 +19,7 @@ const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
 
 export function getAllBreeds() {
   return function (dispatch) {
+    dispatch(activateLoading());
     return axios(`${API_URL}/dogs`)
       .then((response) => {
         dispatch({
@@ -30,6 +33,7 @@ export function getAllBreeds() {
 
 export const getBreedsByName = (name) => {
   return function (dispatch) {
+    dispatch(activateLoading());
     return axios(`${API_URL}/dogs?name=${name}`)
       .then((response) => {
         dispatch({
@@ -56,6 +60,7 @@ export function getAllTemperaments() {
 
 export function getBreedById(id) {
   return function (dispatch) {
+    dispatch(activateLoading());
     return axios(`${API_URL}/dogs/${id}`)
       .then((response) => {
         dispatch({
@@ -110,4 +115,8 @@ export function changeTheme(payload) {
 
 export function changeLang(payload) {
   return { type: TOGGLE_LANGUAGE, payload };
+}
+
+export function activateLoading() {
+  return { type: TOGGLE_IS_LOADING };
 }

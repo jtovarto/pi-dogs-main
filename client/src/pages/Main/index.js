@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+
 import Card from "../../components/Card";
 import Input from "../../components/Input";
 import Select from "../../components/Input/Select";
@@ -24,6 +25,7 @@ const Main = () => {
 
   const storeBreeds = useSelector((state) => state.allBreeds);
   const storeTempers = useSelector((state) => state.allTempers);
+  const isLoading = useSelector((state) => state.isLoading);
 
   useEffect(() => {
     dispatch(getAllBreeds());
@@ -137,7 +139,7 @@ const Main = () => {
       ));
     }
 
-    return <p className={styles.title}>No results</p>;
+    return <p className={styles.title}>{translate("No results")}</p>;
   };
 
   return (
@@ -148,7 +150,7 @@ const Main = () => {
         <div className={styles.panel}>
           <div className={styles.filter_panel}>
             <Select
-              label={translate("Filter by resource")}
+              label={translate("Filter by source")}
               onChange={(e) => setSource(e.target.value)}
               value={sourceFilter}
             >
@@ -179,10 +181,10 @@ const Main = () => {
 
         <div className={styles.result_header}>
           <p>
-            Results <span>({count})</span>
+            {translate("Results")} <span>({count})</span>
           </p>
           <div>
-            <button type="button" onClick={clearFilters}>
+            <button className={styles.btn} type="button" onClick={clearFilters}>
               {translate("Clear all")}
             </button>
           </div>
@@ -200,10 +202,14 @@ const Main = () => {
           </div>
         </div>
 
-        <div className={styles.content}>{print()}</div>
-        {/* {<LoadSpinner />} */}
-
-        <Paginator currentPage={page} count={count} setPage={setPage} />
+        {isLoading ? (
+          <LoadSpinner />
+        ) : (
+          <>
+            <div className={styles.content}>{print()}</div>
+            <Paginator currentPage={page} count={count} setPage={setPage} />
+          </>
+        )}
       </div>
     </>
   );

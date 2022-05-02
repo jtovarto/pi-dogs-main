@@ -1,5 +1,8 @@
 import styles from "./Card.module.css";
+import useLang from "../../utils/Lang/useLang";
+
 const Card = ({ breed }) => {
+  const { translate } = useLang();
   return (
     <div
       className={`${styles.card} ${styles.card}`}
@@ -14,7 +17,7 @@ const Card = ({ breed }) => {
         </div>
         <div className={styles.info}>
           <span>
-            Weight: {breed.weight[0]} - {breed.weight[1]}
+            {translate("Weight")}: {breed.weight[0]} - {breed.weight[1]}
           </span>
         </div>
         <div className={styles.icons}>

@@ -3,6 +3,7 @@
     background-color: var(--color-light);
     margin: auto;
     padding: 2rem;
+    transition: background-color .5s ease-in-out;
 }
 
 @media(max-width:575px) {
@@ -99,4 +100,15 @@
 
 .result_header .sorter select span {
     font-size: .8rem !important;
+}
+
+.btn {
+    color: var(--color-dark);
+    background-color: transparent;
+    cursor: pointer;    
+}
+
+.btn:hover {
+    font-weight: 600;
+    background-color: var(--color-light);
 }
