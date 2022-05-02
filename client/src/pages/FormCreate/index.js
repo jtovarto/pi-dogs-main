@@ -28,14 +28,14 @@ const FormCreate = () => {
 
   const inputDefault = {
     name: "",
-    min_weight: 1,
-    max_weight: 2,
-    min_height: 1,
-    max_height: 2,
-    min_lifespan: 1,
-    max_lifespan: 2,
-    image: "https://aaa.com?aaa.jpg",
-    temperaments: ["1", "6"],
+    min_weight: 0,
+    max_weight: 0,
+    min_height: 0,
+    max_height: 0,
+    min_lifespan: 0,
+    max_lifespan: 0,
+    image: "",
+    temperaments: [],
   };
   const [input, setInput] = useState(inputDefault);
 
@@ -84,14 +84,14 @@ const FormCreate = () => {
       input,
       {
         name: "isRequired|isString|isGreaterThan:3",
-        min_weight: "isRequired|isNumber|isBetween:1,20|isLessThan:max_weight",
+        min_weight: "isRequired|isNumber|isBetween:1,80|isLessThan:max_weight",
         max_weight:
-          "isRequired|isNumber|isBetween:1,20|isGreaterThan:min_weight",
-        min_height: "isRequired|isNumber|isBetween:1,20|isLessThan:max_height",
+          "isRequired|isNumber|isBetween:1,85|isGreaterThan:min_weight",
+        min_height: "isRequired|isNumber|isBetween:1,65|isLessThan:max_height",
         max_height:
-          "isRequired|isNumber|isBetween:1,20|isGreaterThan:min_height",
+          "isRequired|isNumber|isBetween:1,75|isGreaterThan:min_height",
         min_lifespan:
-          "isRequired|isNumber|isBetween:1,20|isLessThan:max_lifespan",
+          "isRequired|isNumber|isBetween:1,15|isLessThan:max_lifespan",
         max_lifespan:
           "isRequired|isNumber|isBetween:1,20|isGreaterThan:min_lifespan",
         temperaments: "isArray",
