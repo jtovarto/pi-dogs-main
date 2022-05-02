@@ -8,9 +8,17 @@ const validators = {
     return +data[name] >= +min && +data[name] <= +max;
   },
 
-  isLessThan: (data, name, compare) => data[name] < data[compare],
+  isLessThan: (data, name, compare) => {
+    const value = isNaN(data[name]) ? data[name].length : +data[name];
+    const comp = isNaN(compare) ? +data[compare] : +compare;
+    return value < comp;
+  },
 
-  isGreaterThan: (data, name, compare) => data[name] > data[compare],
+  isGreaterThan: (data, name, compare) => {
+    const value = isNaN(data[name]) ? data[name].length : +data[name];
+    const comp = isNaN(compare) ? +data[compare] : +compare;
+    return value > comp;
+  },
 
   isImage: (data, name) => /(https?:\/\/.*\.(?:png|jpg|gif))/.test(data[name]),
 
@@ -29,15 +37,24 @@ const messages = {
   isNumber: (name) => `${name} must be a number`,
   isBetween: (name, compare) => {
     const [min, max] = compare.split(",");
-    return `${name} must be between ${min} and ${max}`;
+    const field_name = name.split('_').join(' ');
+    return `${field_name} must be between ${min} and ${max}`;
   },
   isLessThan: (name, compare) => {
-    const [desc, property] = compare.split("_");
-    return `${name} must be less than ${desc} ${property}`;
+    if (isNaN(compare)) {
+      const [desc, property] = compare.split("_");
+      const field_name = name.split('_').join(' ');
+      return `${field_name} must be less than ${desc} ${property}`;
+    }
+    return `${name} must be less than ${compare}`;
   },
   isGreaterThan: (name, compare) => {
-    const [desc, property] = compare.split("_");
-    return `${name} must be greater than ${desc} ${property}`;
+    if (isNaN(compare)) {
+      const [desc, property] = compare.split("_");
+      const field_name = name.split('_').join(' ');
+      return `${field_name} must be greater than ${desc} ${property}`;
+    }
+    return `${name} must be greater than ${compare}`;
   },
   isImage: (name) => `${name} must be a valid url image`,
   isRequired: (name) => `${name} is required`,

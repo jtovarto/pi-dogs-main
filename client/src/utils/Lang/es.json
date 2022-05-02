@@ -3,5 +3,18 @@
     "Enter": "Entrar",
     "First": "Primero",
     "Prev": "Anterior",
-    "Home": "Inicio"
+    "Home": "Inicio",
+    "Filter by temper": "Filtrar por temperamento",
+    "Create a new breed": "Crear nueva raza",
+    "Name": "Nombre",
+    "Min. height": "Altura min.",
+    "Max. height": "Altura max.",
+    "Min. weight": "Peso min.",
+    "Max. weight": "Peso max.",
+    "Min. life expectancy": "Espectativa de Vida min.",
+    "Max. life expectancy": "Espectativa de Vida max.",
+    "URL Image": "URL Imagen",
+    "Temperaments": "Temperamentos",
+    "Added temperaments": "temperamentos agregados",
+    "Create": "Crear"
 }
