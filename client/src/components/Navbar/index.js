@@ -15,6 +15,9 @@ const Navbar = () => {
         <Link className={styles.nav_link} to="/">
           {translate("Home")}
         </Link>
+        <Link className={styles.nav_link} to="/main">
+          {translate("Main")}
+        </Link>
         <Link className={styles.nav_link} to="/create">
           {translate("Create")}
         </Link>
