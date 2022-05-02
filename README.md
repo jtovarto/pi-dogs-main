@@ -8,6 +8,13 @@
   <img height="200" src="./dog.png" />
 </p>
 
+
+# Live demo
+
+Puede ver una version en producción en el sigueinet enlace: [Demo](https://client-pi-henry-jtovarto.herokuapp.com/)
+
+<br/>
+
 ## Objetivos del Proyecto
 
 - Construir una App utlizando React, Redux, Node y Sequelize.
