@@ -16,5 +16,12 @@
     "URL Image": "URL Image",
     "Temperaments": "Temperaments",
     "Added temperaments": "Added Temperaments",
-    "Create": "Create"
+    "Create": "Create",
+    "Filter by source":"Filter by source",
+    "Filter by name":"Filter by name",
+    "Results":"Results",
+    "Clear all":"Clear all",
+    "Order by":"Order by",
+    "No results":"No Results",
+    "Weight": "Weight"
 }
