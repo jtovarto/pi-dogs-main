@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -37,22 +37,24 @@ const Main = () => {
   const [temperFilter, setTemper] = useState("");
   const [sourceFilter, setSource] = useState("");
 
-  const filterByBreed = (e) => {
-    e.preventDefault();
+  let filterTimeout = useRef();
+  const filterByBreed = useCallback(
+    (e) => {
+      e.preventDefault();
+      clearTimeout(filterTimeout.current);
+      let name = e.target.value;
+      setBreed(name);
+      if (!name) {
+        return dispatch(getAllBreeds());
+      }
 
-    clearTimeout(filterTimeout);
-
-    let name = e.target.value;
-    if (!name || name.length < 1) {
-      return dispatch(getAllBreeds());
-    }
-
-    setBreed(name);
-
-    filterTimeout = setTimeout(() => {
-      dispatch(getBreedsByName(name));
-    }, 500);
-  };
+      filterTimeout.current = setTimeout(() => {
+        console.log(name);
+        dispatch(getBreedsByName(name));
+      }, 1000);
+    },
+    [dispatch]
+  );
 
   const filterByTemper = (array, temper) => {
     if (temper.length > 3) {
@@ -69,8 +71,6 @@ const Main = () => {
 
   //Sort
   const [orderBy, setOrderBy] = useState("");
-  let filterTimeout;
-
   let orderByCallbacks = {
     name: (a, b) => {
       let [direction] = orderBy.split("_");
