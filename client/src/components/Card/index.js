@@ -8,7 +8,7 @@ const Card = ({ breed }) => {
   return (
     <div
       className={`${styles.card} ${styles.card}`}
-      style={{ backgroundImage: `url(${breed.image})` }}
+      style={{ backgroundImage: `url('${breed.image}')` }}
     >
       <div className={styles.border}>
         <h2>{breed.name}</h2>
