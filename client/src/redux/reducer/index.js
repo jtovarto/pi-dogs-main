@@ -8,13 +8,21 @@ import {
   CLEAR_NOTIFICATION,
   TOGGLE_DARK_MODE,
   TOGGLE_LANGUAGE,
-
   TOGGLE_IS_LOADING,
-
 } from "../actions";
 
 import { THEME_LIGHT } from "../../hooks/useTheme";
 import { ES } from "../../utils/Lang/useLang";
+
+const emptyBreed = {
+  id: "",
+  name: "",
+  height: [],
+  weight: [],
+  lifespan: [],
+  temperaments: [],
+  image: "",
+};
 
 const initialState = {
   allBreeds: [],
@@ -22,9 +30,8 @@ const initialState = {
   notification: [],
   theme: THEME_LIGHT,
   lang: ES,
-
+  breed: { ...emptyBreed },
   isLoading: true,
-
 };
 
 /* const reducers = {
@@ -63,7 +70,7 @@ const reducer = (state = initialState, { type, payload }) => {
     case CLEAR_BREED_BY_ID: {
       return {
         ...state,
-        breed: {},
+        breed: { ...emptyBreed },
       };
     }
     case NOTIFY: {
