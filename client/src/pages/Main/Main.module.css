@@ -4,6 +4,7 @@
     margin: auto;
     padding: 2rem;
     transition: background-color .5s ease-in-out;
+    min-height: 90vh;
 }
 
 @media(max-width:575px) {
@@ -52,8 +53,10 @@
 .content {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    align-items: center;
     padding: 1rem 0;
     grid-gap: 1rem;
+    min-height: 40vh;    
 }
 
 .title {
