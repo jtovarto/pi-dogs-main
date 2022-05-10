@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import styles from "./Detail.module.css";
 import Navbar from "../../components/Navbar";
 import { getBreedById, clearBreedById } from "../../redux/actions";
+import useLang from "../../utils/Lang/useLang";
 
 const Detail = () => {
   const breedDefault = {
@@ -17,37 +19,58 @@ const Detail = () => {
   const { id: paramId } = useParams();
   const dispatch = useDispatch();
   const breed = useSelector((state) => state.breed);
-  const { id, name, height, weight, lifespan, temperaments, image } = breed ?? breedDefault;
+  const { name, height, weight, lifespan, temperaments, image } =
+    breed ?? breedDefault;
+
   useEffect(() => {
     dispatch(getBreedById(paramId));
-
     return () => dispatch(clearBreedById());
-  }, []);
+  }, [dispatch, paramId]);
+
+  const { translate } = useLang();
 
   return (
     <>
+      <div
+        className={styles.bg_mask}
+        style={{ backgroundImage: `url('${image}')` }}
+      ></div>
+      <div className={styles.bg_mask1}></div>
+
       <Navbar />
 
-      <div style={{ display: "flex", gap: ".5rem", padding: "2rem" }}>
-        <span>Home</span>
-        <span> > </span>
-        <Link to="/main">Volver</Link>
-      </div>
-
-      <div style={{ margin: "0 auto", width: "300px" }}>
-        <img src={image} />
-        <br></br>
-        <br></br>
-        <p>ID: {id ?? ""}</p>
-        <p>Name: {name ?? ""}</p>
-        <p>Height: {height ?? ""}</p>
-        <p>Weight:{weight?.length > 0 ? `${weight[0]} - ${weight[1]}` : null}</p>
-        <p>Lifespan: {lifespan ?? ""}</p>
-        <ul>
-          {temperaments?.length > 0
-            ? temperaments.map((temper) => <li key={temper}>{temper}</li>)
-            : "No tempers registered"}
-        </ul>
+      <div className={styles.container}>
+        <div
+          className={styles.card}
+          style={{ backgroundImage: `url('${image}')` }}
+        >
+          <div className={styles.top}>
+            <h1>{name}</h1>
+            <div>
+              {temperaments?.length > 0 ? (
+                temperaments.map((temper) => (
+                  <span key={`detail${temper}`}>{temper}</span>
+                ))
+              ) : (
+                <span>{translate("No tempers registered")}</span>
+              )}
+            </div>
+          </div>
+          <div className={styles.bottom}>
+            <div className={styles.item}>
+              <span>{translate("Height")}</span>
+              <span>{height}</span>
+            </div>
+            <div className={styles.item}>
+              <span>{translate("Weight")}</span>
+              <span>{weight.join(" - ")}</span>
+            </div>
+            <div className={styles.item}>
+              <span>{translate("Life span")}</span>
+              <span>{lifespan}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
