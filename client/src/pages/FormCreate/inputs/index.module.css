@@ -26,8 +26,8 @@
 
 .badges_wrapper {
     display: flex;
-    align-items: start;
-    justify-content: start;
+    align-items: flex-start;
+    justify-content: flex-start;
     gap: .5rem;
     flex-wrap: wrap;
     height: 100%;

@@ -34,7 +34,7 @@ const FormSelect = ({ value, values, handlerSelect, removeTemper, errors }) => {
     if (values.length > 0) {
       if (storeTempers.length > 0) {
         return values.map((v) => {
-          const found = storeTempers.find((temper) => temper.id == +v);
+          const found = storeTempers.find((temper) => +temper.id === +v);
           return (
             <span key={found.name} className={styles.badge}>
               {found.name}

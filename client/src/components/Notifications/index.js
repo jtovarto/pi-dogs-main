@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearNotification } from "../../redux/actions";
-import styles from "./Notifications.modules.css";
+
 const Notification = () => {
   const notification = useSelector((state) => state.notification);
   const [count, setCount] = useState(0);

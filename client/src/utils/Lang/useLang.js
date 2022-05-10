@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { changeLang } from "../../redux/actions/index.js";
 import Langs from "./langs.js";
@@ -8,9 +8,7 @@ export const EN = "en";
 
 function useLang() {
   const dispatch = useDispatch();
-  const [lang, setLang] = useState("es");
-
-  const [langFile, setLangFile] = useState({});
+  const [lang, setLang] = useState("es");  
 
   useEffect(() => {
     let storedLang = localStorage.getItem("lang");
@@ -23,8 +21,7 @@ function useLang() {
       localStorage.setItem("lang", lang);      
       dispatch(changeLang(lang));
     }
-
-    setLangFile(Langs[storedLang]);
+    
   }, [lang, dispatch]);
 
   const toogleLang = function () {
