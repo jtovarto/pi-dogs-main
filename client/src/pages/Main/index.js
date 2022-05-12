@@ -28,8 +28,12 @@ const Main = () => {
   const isLoading = useSelector((state) => state.isLoading);
 
   useEffect(() => {
-    dispatch(getAllBreeds());
-    dispatch(getAllTemperaments());
+    if (storeBreeds.length < 172) {
+      dispatch(getAllBreeds());      
+    }
+    if (!storeTempers.length) {
+      dispatch(getAllTemperaments());
+    }
   }, [dispatch]);
 
   //Filter
