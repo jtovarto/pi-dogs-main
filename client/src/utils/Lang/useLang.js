@@ -8,13 +8,13 @@ export const EN = "en";
 
 function useLang() {
   const dispatch = useDispatch();
-  const storedLang = localStorage.getItem("lang") ?? "es";
-  const [lang, setLang] = useState(storedLang);
+  const storedLang = localStorage.getItem("lang");
+  const [lang, setLang] = useState(storedLang ?? "es");
 
   useEffect(() => {
+    console.log(lang, storedLang);
     if (lang !== storedLang) {
       localStorage.setItem("lang", lang);
-      setLang(lang);
       dispatch(changeLang(lang));
     }
   }, [lang, dispatch]);
