@@ -85,10 +85,8 @@ export const createBreed = (data) => {
     return axios
       .post(`${API_URL}/dog`, data)
       .then((response) => {
-        if (response.status === 400) {
-          throw new Error();
-        }
-
+        if (response.status === 400) throw new Error();
+        dispatch(getAllBreeds());
         dispatch({
           type: NOTIFY,
           payload: {
@@ -113,7 +111,6 @@ export function changeTheme(payload) {
   return { type: TOGGLE_DARK_MODE, payload };
 }
 
-
 export function changeLang(payload) {
   return { type: TOGGLE_LANGUAGE, payload };
 }
@@ -121,4 +118,3 @@ export function changeLang(payload) {
 export function activateLoading() {
   return { type: TOGGLE_IS_LOADING };
 }
-
