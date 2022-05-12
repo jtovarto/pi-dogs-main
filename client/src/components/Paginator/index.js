@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Paginator.module.css";
 import icon from "../../assets/images/huella.png";
 
-const Paginator = ({ currentPage, count, setPage }) => {  
+const Paginator = ({ currentPage, count, setPage }) => {
   const [totalPage, setTotalPage] = useState([1]);
 
   useEffect(() => {
