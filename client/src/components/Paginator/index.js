@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Paginator.module.css";
 import icon from "../../assets/images/huella.png";
 
-const Paginator = ({ currentPage, count, setPage }) => {  
+const Paginator = ({ currentPage, count, setPage }) => {
   const [totalPage, setTotalPage] = useState([1]);
 
   useEffect(() => {
@@ -11,8 +11,11 @@ const Paginator = ({ currentPage, count, setPage }) => {
     for (let i = 2; i <= max; i++) {
       pages.push(i);
     }
+    if (currentPage > max) {
+      setPage(max);
+    }
     setTotalPage(pages);
-  }, [count]);
+  }, [count, currentPage, setPage]);
 
   const nextPage = () => {
     if (currentPage < totalPage.length) setPage(currentPage + 1);
@@ -23,29 +26,26 @@ const Paginator = ({ currentPage, count, setPage }) => {
   };
   return (
     <div className={styles.container}>
-      <a
+      <span
         className={`${styles.btn_page_num} ${
           currentPage === 1 ? styles.disabled : ""
         }`}
-        href="#/"
         onClick={() => setPage(1)}
       >
         <span>&lt;&lt;</span>
-      </a>
-      <a
+      </span>
+      <span
         className={`${styles.btn_page_num} ${
           currentPage === 1 ? styles.disabled : ""
         }`}
-        href="#/"
         onClick={prevPage}
       >
         <span>&lt;</span>
-      </a>
+      </span>
 
       <div className={styles.page_wrapper}>
         {totalPage.map((value) => (
-          <a
-            href="#/"
+          <span
             key={"paginator" + value}
             onClick={() => setPage(value)}
             className={`${styles.btn_page_num} ${
@@ -57,28 +57,27 @@ const Paginator = ({ currentPage, count, setPage }) => {
             ) : (
               value
             )}
-          </a>
+          </span>
         ))}
       </div>
 
-      <a
+      <span
         className={`${styles.btn_page_num} ${
           currentPage === totalPage.length ? styles.disabled : ""
         }`}
-        href="#/"
         onClick={nextPage}
       >
         <span>&gt;</span>
-      </a>
-      <a
+      </span>
+
+      <span
         className={`${styles.btn_page_num} ${
           currentPage === totalPage.length ? styles.disabled : ""
         }`}
-        href="#/"
         onClick={() => setPage(totalPage.length)}
       >
         <span>&gt;&gt;</span>
-      </a>
+      </span>
     </div>
   );
 };
