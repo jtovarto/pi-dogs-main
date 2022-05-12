@@ -207,7 +207,9 @@ const Main = () => {
         ) : (
           <>
             <div className={styles.content}>{print()}</div>
-            <Paginator currentPage={page} count={count} setPage={setPage} />
+            {count > 0 ? (
+              <Paginator currentPage={page} count={count} setPage={setPage} />
+            ) : null}
           </>
         )}
       </div>
