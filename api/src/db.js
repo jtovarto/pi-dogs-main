@@ -14,7 +14,7 @@ if (NODE_ENV === "local") {
     native: false,
   };
 } else if (NODE_ENV === "production") {
-  connection = process.env.DATABASE_URL_SUPA;
+  connection = process.env.DATABASE_URL;
   options = {
     dialectOptions: {
       ssl: {
